@@ -17,7 +17,7 @@ Send,_%A_Year%%A_MM%%A_DD%
 Send, {enter}
 Return
 
-
+^Launch_App1::
 <^>!F12::
 Run, "G:\02 MCOP"
 return
@@ -39,10 +39,15 @@ return
 ::¿di::duda/inseguro
 
 
-;AppsKey & {::
-;send, MCOP
-;Return
+/*
+;esto permite que la tecla sola siga funcionando
+$AppsKey::Send, {AppsKey}
 
+;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
+AppsKey & {::
+send, MCOP
+Return
+*/
 
 
 ;escribir versión

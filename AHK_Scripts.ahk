@@ -256,10 +256,11 @@ return
     \_/_____________/ 
  */
 
+
 ;esto permite que la tecla sola siga funcionando
 $AppsKey::Send, {AppsKey}
 
-;;ESTA LINEA SE OUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
+;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
 AppsKey & {::
 send, MCOP
 Return
@@ -388,8 +389,8 @@ Return
  */
 
 <^>!a::
-MsgBox, % GetKeyName("SC01E")
-MsgBox, %A_PriorKey%
+;MsgBox, % GetKeyName("SC01E")
+;MsgBox, %A_PriorKey%
 KeyHistory
 return
 
@@ -417,9 +418,25 @@ return
 
 
 ;Alt Tab Derecho 
-RControl & }::AltTab
-return
+Control & XButton2::ShiftAltTab
+Control & XButton1::AltTab
 
+
+
+#if GetKeyState("Alt", "P")
+RControl & }::ShiftAltTab
+
+RControl & }::AltTab
+
+
+
+
+
+/*if GetKeyState("Shift", "P")  
+    ShiftAltTab
+    else AltTab
+return
+*/
 
 
 
