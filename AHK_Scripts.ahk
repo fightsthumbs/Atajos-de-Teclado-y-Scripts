@@ -256,10 +256,11 @@ return
     \_/_____________/ 
  */
 
+
 ;esto permite que la tecla sola siga funcionando
 $AppsKey::Send, {AppsKey}
 
-;;ESTA LINEA SE OUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
+;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
 AppsKey & {::
 send, MCOP
 Return
@@ -388,8 +389,8 @@ Return
  */
 
 <^>!a::
-MsgBox, % GetKeyName("SC01E")
-MsgBox, %A_PriorKey%
+;MsgBox, % GetKeyName("SC01E")
+;MsgBox, %A_PriorKey%
 KeyHistory
 return
 
@@ -417,9 +418,28 @@ return
 
 
 ;Alt Tab Derecho 
+Control & XButton2::ShiftAltTab
+return
+Control & XButton1::AltTab
+return
+
+
+
+if GetKeyState("Shift", "P") ;esta línea no está sirviendo podría borrarla
+RControl & }::ShiftAltTab
+return 
+
 RControl & }::AltTab
 return
 
+
+
+
+/*if GetKeyState("Shift", "P")  
+    ShiftAltTab
+    else AltTab
+return
+*/
 
 
 
@@ -430,6 +450,8 @@ return
     |  ,------------------
     \_/_________________/ 
  */
+
+
 
 Browser_Search::
 Run, D:\Archivos de Programas\Everything\Everything.exe
@@ -510,15 +532,23 @@ send,^+!|
 return
 
 
+;una función
+ reproducirTimeline(mitecla)
+{
+    
+    send,^+!|
+    sleep 50
+    send %mitecla%
+    
+}   
 
 XButton1::
-send,^+!|
-sleep 100
-send l
-;send, Space
+reproducirTimeline("l")
 return
 
-
+XButton2::
+reproducirTimeline("j")
+return
 
 
 /* 
