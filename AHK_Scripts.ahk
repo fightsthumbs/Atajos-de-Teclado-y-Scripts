@@ -15,6 +15,54 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
      */  
 
 
+
+
+passwordAssist(x) {
+    passwordAssist_Alfabet := "abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
+    passwordAssist_vocales := "aeiou" ;todas las vocales
+    passwordAssist_key := 0 ;
+    sitio := x
+    firstLetter := SubStr(x, 1, 1)
+    secondLetter := SubStr(x, 2, 1)
+    lastLetter := SubStr(x, 0)
+    passwordAssist_SpecialChar := ",.,."
+
+    StringGetPos, LetterIndex, passwordAssist_Alfabet, %firstLetter%
+    StringGetPos, nDelimeter, passwordAssist_Alfabet, n
+    ;StringGetPos, OutputVar, InputVar, SearchText [, L#|R#, Offset]
+
+    if (LetterIndex < nDelimeter) {
+        passwordAssist_key := "QWE"
+    } else {
+        passwordAssist_key := "ASD"
+    }
+        
+    IfInString, passwordAssist_vocales, %secondLetter%
+    {
+        even := "246"
+    } else {
+        even := "357"
+    }
+        
+
+    IfInString, passwordAssist_vocales, %lastLetter% 
+    {
+        bn := "ntrs" 
+    } else {
+        bn := "brea"
+    }
+        
+
+    ;con := x[0].x[-1].passwordAssist_key.passwordAssist_SpecialChar.even.bn
+    ;MsgBox %bn%
+    sleep 30
+    send % firstLetter lastLetter passwordAssist_key passwordAssist_SpecialChar even bn
+    return
+    
+    }
+;ScriptEnd
+
+
 ;#IfWinActive, ahk_class Notepad
 ;Numpad5 & j::
 ;Send, me parece extraordinario
@@ -279,6 +327,10 @@ else
 
 return
 
+AppsKey & F1::
+InputBox, siteName, Password Assistant, Escribe el Nombre del sitio,,,,,,, 40,
+passwordAssist(siteName)
+return
 
 AppsKey & F11::
 InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo

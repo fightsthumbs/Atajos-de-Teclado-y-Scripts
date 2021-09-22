@@ -38,6 +38,7 @@ return
 ::¿se::se enreda
 ::¿di::duda/inseguro
 ::¿sr::suena raro
+::¿nv::no vocaliza/problemas de vocalización o pronunciación
 
 
 /*
