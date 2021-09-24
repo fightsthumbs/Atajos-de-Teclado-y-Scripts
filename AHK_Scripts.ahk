@@ -31,7 +31,7 @@ passwordAssist(x) {
     StringGetPos, nDelimeter, passwordAssist_Alfabet, n
     ;StringGetPos, OutputVar, InputVar, SearchText [, L#|R#, Offset]
 
-    if (LetterIndex < nDelimeter) {
+    if (LetterIndex < nDelimeter + 1) {
         passwordAssist_key := "QWE"
     } else {
         passwordAssist_key := "ASD"
@@ -580,6 +580,7 @@ return
 
 ;move playhead at cursor CTRL ALT SHIFT Right Click in Premiere
 +RButton::
+Click Middle
 send,^+!|
 return
 
@@ -587,7 +588,7 @@ return
 ;una función
  reproducirTimeline(mitecla)
 {
-    
+    Click Middle ;pone focus en el timeline sobre el que esté el mouse
     send,^+!|
     sleep 50
     send %mitecla%
