@@ -14,6 +14,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
      */  
 
+;;subrutina para remover los tooltips
+RemoveToolTip:
+ToolTip
+return
 
 
 
@@ -142,6 +146,10 @@ Return
 
 */
 
+RAlt::
+send, {RAlt}
+return
+
 RAlt & G::  
     if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T") ;^ indica que alguna de las dos condiciones debe ser verdadera, pero solo una.
         send Ĝ  
@@ -184,9 +192,7 @@ RAlt & U::
     send ŭ  
 return
 
-RAlt::
-send, {RAlt}
-return
+
 
 
 ;escribe el dia y el mes
@@ -218,6 +224,64 @@ return
 :*:@fp::ficcionpulpa@yahoo.com
 :*:@ba::balvarez@cckcentroamerica.com
 :*:@uccc::benjamin.alvarez@ucr.ac.cr
+
+
+
+
+
+
+/*
+ / \-------------------, 
+ \_,|                  | 
+    |    Windows KEY   | 
+    |  ,-----------------
+    \_/________________/ 
+*/
+/*
+LWin  <#
+RWin   >#
+*/
+
+$LWin::Send, {LWin}
+
+
+LWin & F1::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F2::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F3::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F4::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F5::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+
+LWin & F6::
+FileSelectFolder, OutputVar, , 3
+if OutputVar =
+    MsgBox, You didn't select a folder.
+else
+    MsgBox, You selected folder "%OutputVar%".
+return
+
+LWin & F7::
+
+return
 
 
 
@@ -317,13 +381,13 @@ Return
 ;cambiar entre las ventanas de explorador
 AppsKey & -::
 sleep 11 ;this is to avoid the stuck modifiers bug
-IfWinNotExist, ahk_class CabinetWClass
-	Run, explorer.exe
-GroupAdd, taranexplorers, ahk_class CabinetWClass
-if WinActive("ahk_exe explorer.exe")
+IfWinNotExist, ahk_class dopus.lister ;;ahk_class CabinetWClass
+	Run, dopus.exe ;;explorer.exe
+GroupAdd, taranexplorers, ahk_class dopus.lister
+if WinActive("ahk_exe dopus.exe") ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
 	GroupActivate, taranexplorers, r
 else
-	WinActivate ahk_class CabinetWClass ;you have to use WinActivatebottom if you didn't create a window group.
+	WinActivate ahk_class dopus.lister ;you have to use WinActivatebottom if you didn't create a window group.
 
 return
 
@@ -420,7 +484,10 @@ MouseGetPos,x,y
 PixelGetColor,rgb,x,y,RGB
 StringTrimLeft,rgb,rgb,2
 Clipboard=%rgb%
+ToolTip, Color %rgb% copiado!
+SetTimer, RemoveToolTip, -1500 ;;esto podría tambien ser un sleep y  después volver a poner un tooltip
 Return
+
 
 
 
@@ -538,11 +605,12 @@ return
 
 #IfWinActive ahk_exe Adobe Premiere Pro.exe
 ;F3 para borrar el clip debajo del playhead
-F3::
+/* F3::
 Send, d
 Send, +{Delete}
 return
-
+ */
+ 
 ;Borrar clip solo
 ;XButton1::
 ^Mbutton::
