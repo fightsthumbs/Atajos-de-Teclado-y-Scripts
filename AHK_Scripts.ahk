@@ -19,6 +19,18 @@ RemoveToolTip:
 ToolTip
 return
 
+;;función para interar entre varias intancias de un mismo programa
+flashOpen(nombre, exe) {
+
+    IfWinNotExist, %nombre%
+    {
+        run, %exe%
+        return
+    } else {
+        WinActivateBottom, %nombre%
+        return
+    }
+}
 
 
 passwordAssist(x) {
@@ -396,6 +408,12 @@ InputBox, siteName, Password Assistant, Escribe el Nombre del sitio,,,,,,, 40,
 passwordAssist(siteName)
 return
 
+AppsKey & F10::
+InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
+Sleep 50
+RunWait, https://www.google.com/search?q=%termino%
+return
+
 AppsKey & F11::
 InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo
 Sleep 50
@@ -407,6 +425,13 @@ InputBox, transWord, English Word, Escribe una palabra en inglés para traducirl
 Sleep 50
 RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
 return
+
+
+AppsKey & Numpad0::
+flashOpen("ahk_class dopus.lister", "dopus.exe")
+return
+
+
 
 AppsKey & Ins::
 ;este rellena los campos de la boleta de horas conferencia
