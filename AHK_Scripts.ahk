@@ -296,6 +296,19 @@ LWin & F7::
 return
 
 
+LWin & Browser_Home::
+LWin & MButton::
+;Winset, Alwaysontop, , A ; Ctrl + Space 
+WinSet, Transparent, 30, A
+return
+
+LWin & RButton::
+;Winset, Alwaysontop, , A ; Ctrl + Space 
+WinSet, Transparent, Off, A
+return
+
+
+
 
 
 /* 
