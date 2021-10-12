@@ -1,4 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -94,14 +94,22 @@ Return
 
 */
 
+<<<<<<< Updated upstream
 RAlt & G::  
+=======
+RAlt::
+send, {RAlt}
+return
+
+RAlt & g::  
+>>>>>>> Stashed changes
     if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T") ;^ indica que alguna de las dos condiciones debe ser verdadera, pero solo una.
         send Ĝ  
     else  
     send ĝ  
 return  
  
-RAlt & C::  
+RAlt & c::  
     if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
         send Ĉ  
     else  
@@ -174,6 +182,104 @@ return
 
 
 
+<<<<<<< Updated upstream
+=======
+
+
+/*
+ / \-------------------, 
+ \_,|                  | 
+    |    Windows KEY   | 
+    |  ,-----------------
+    \_/________________/ 
+*/
+/*
+LWin  <#
+RWin   >#
+*/
+
+$LWin::Send, {LWin}
+
+
+LWin & F1::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F2::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F3::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F4::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+LWin & F5::
+ToolTip You pressed %A_ThisHotkey%.
+SetTimer, RemoveToolTip, -1500
+return
+
+
+LWin & F6::
+FileSelectFolder, OutputVar, , 3
+if OutputVar =
+    MsgBox, You didn't select a folder.
+else
+    MsgBox, You selected folder "%OutputVar%".
+return
+
+LWin & F7::
+
+return
+
+
+
+transToggle	:= 0
+return
+
+
+
+LWin & Browser_Home::
+LWin & MButton::
+	; This is where the toggling occurs. You're setting the toggle to the opposite of itself.
+	; 1 becomes 0. True becomes False. You can use either.
+	transToggle	:= !transToggle
+
+	if (transToggle = 0){
+		; If the toggle is off (0 or false), do the stuff in here
+		WinSet, Transparent, 120, A
+	}
+	else{
+		; If the toggle is on (1 or true), do the stuff in here
+		WinSet, Transparent, Off, A
+	}
+
+return
+
+/*
+LWin & Browser_Home::
+LWin & MButton::
+;Winset, Alwaysontop, , A ; Ctrl + Space 
+WinSet, Transparent, 30, A
+return
+
+LWin & RButton::
+;Winset, Alwaysontop, , A ; Ctrl + Space 
+WinSet, Transparent, Off, A
+return
+*/
+
+
+
+
+>>>>>>> Stashed changes
 /* 
  / \------------------, 
  \_,|                 | 
@@ -320,6 +426,16 @@ send,{tab}%A_YYYY%
 Return
 
 
+AppsKey & q::
+FormatTime, todaysDate, %A_Now%, yyyyMMdd
+send, %todaysDate%
+return
+
+AppsKey & w::
+FormatTime, todaysDate, %A_Now%, HHmm
+send, %todaysDate%
+return
+
 
 
 AppsKey & f::
@@ -416,6 +532,15 @@ return
 
 
 
+
+
+/* 
+ / \-------------, 
+ \_,|            | 
+    |     CTRL   | 
+    |  ,-----------
+    \_/__________/ 
+ */
 
 ;Alt Tab Derecho 
 Control & XButton2::ShiftAltTab
