@@ -32,6 +32,24 @@ flashOpen(nombre, exe) {
     }
 }
 
+/* 
+flashOpen(nombre, exe) {
+    groupName:= %exe% . _group
+    sleep 11 ;this is to avoid the stuck modifiers bug
+    IfWinNotExist, %nombre% ;;ahk_class CabinetWClass
+        Run, %exe% ;;explorer.exe
+    GroupAdd, groupName, %nombre%
+    prog:= ahk_exe  . %exe%
+    
+    if WinActive(prog) ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
+        GroupActivate, groupName, r
+    else
+        WinActivate %nombre% ;you have to use WinActivatebottom if you didn't create a window group.
+
+    return
+}
+ */
+
 
 passwordAssist(x) {
     passwordAssist_Alfabet := "abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
@@ -75,15 +93,13 @@ passwordAssist(x) {
     send % firstLetter lastLetter passwordAssist_key passwordAssist_SpecialChar even bn
     return
     
-    }
+}
+
+
+
+
 ;ScriptEnd
 
-
-;#IfWinActive, ahk_class Notepad
-;Numpad5 & j::
-;Send, me parece extraordinario
-;MsgBox, LOL
-;Return
 
 
 /* #IfWinActive
@@ -91,19 +107,6 @@ Numpad5 & c::
 WinGetClass, class, A
 MsgBox, The active window's class is "%class%".
 Return
-
-:*:acheiv::achiev
-::achievment::achievement
-::acquaintence::acquaintance
-:*:adquir::acquir
-::aquisition::acquisition
-:*:agravat::aggravat
-:*:allign::align
-::ameria::America */
-
-;#IfWinActive
-;:*:ftw::Free the whales
-;::ftw::"For the win"
 
 /* #IfWinActive, Spotify Free
 Numpad5 & s::
@@ -149,63 +152,6 @@ Return
 */
 
 
-/*
-▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-██░▄▄▄█░▄▄█▀▄▄▀█░▄▄█░▄▄▀█░▄▄▀█░▄▄▀█▄░▄█▀▄▄▀
-██░▄▄▄█▄▄▀█░▀▀░█░▄▄█░▀▀▄█░▀▀░█░██░██░██░██░
-██░▀▀▀█▄▄▄█░████▄▄▄█▄█▄▄█▄██▄█▄██▄██▄███▄▄█
-▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-
-*/
-
-RAlt::
-send, {RAlt}
-return
-
-RAlt & G::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T") ;^ indica que alguna de las dos condiciones debe ser verdadera, pero solo una.
-        send Ĝ  
-    else  
-    send ĝ  
-return  
- 
-RAlt & C::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
-        send Ĉ  
-    else  
-    send ĉ  
-return  
- 
-RAlt & J::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
-        send Ĵ  
-    else  
-    send ĵ  
-return
- 
-RAlt & H::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
-        send Ĥ  
-    else  
-    send ĥ  
-return  
- 
-RAlt & S::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
-        send Ŝ  
-    else  
-    send ŝ  
-return  
- 
-RAlt & U::  
-    if GetKeyState("Shift", "P") ^ GetKeyState("CapsLock", "T")  
-        send Ŭ  
-    else  
-    send ŭ  
-return
-
-
-
 
 ;escribe el dia y el mes
 ::fechahoy::
@@ -213,32 +159,17 @@ FormatTime, todaysDate, %A_Now%, dd 'de' MMMM
 send, %todaysDate%
 return
 
-; +!ScrollLock::
-; FormatTime, todaysDate,%A_YYYY%%A_MM%%A_DD%, dd 'de' MMMM
-; send, %todaysDate%
-; return
+::%name::Benjamín
+::%ced::1-1710-0635
 
 
-
-
-::bbbbb::Me llamo Benjamín
-
-
-
-
-
-
-
-
-
+:*:@spam::spam@fightsthumbs.anonaddy.com
+:*:.fg.::fightsthumbs
 :*:@fg::fightsthumbs@gmail.com
 :*:@bb::benisbuying@gmail.com
 :*:@fp::ficcionpulpa@yahoo.com
 :*:@ba::balvarez@cckcentroamerica.com
 :*:@uccc::benjamin.alvarez@ucr.ac.cr
-
-
-
 
 
 
@@ -255,6 +186,7 @@ RWin   >#
 */
 
 $LWin::Send, {LWin}
+return
 
 
 LWin & F1::
@@ -292,10 +224,36 @@ else
 return
 
 LWin & F7::
+return
+
+
+
+transToggle	:= 0
+return
+
+LWin & Browser_Home::
+LWin & MButton::
+	; This is where the toggling occurs. You're setting the toggle to the opposite of itself.
+	; 1 becomes 0. True becomes False. You can use either.
+	transToggle	:= !transToggle
+
+	if (transToggle = 0){
+		; If the toggle is off (0 or false), do the stuff in here
+		WinSet, Transparent, 120, A
+	}
+	else{
+		; If the toggle is on (1 or true), do the stuff in here
+		WinSet, Transparent, Off, A
+	}
 
 return
 
 
+
+
+
+
+/*
 LWin & Browser_Home::
 LWin & MButton::
 ;Winset, Alwaysontop, , A ; Ctrl + Space 
@@ -306,7 +264,7 @@ LWin & RButton::
 ;Winset, Alwaysontop, , A ; Ctrl + Space 
 WinSet, Transparent, Off, A
 return
-
+*/
 
 
 
@@ -346,13 +304,9 @@ return
 
 ;Abrir bloc de notas
 ^+F7::
-;MsgBox, %A_Year%%A_MM%%A_DD%
-;MsgBox, %clipboard%
 Run, notepad.exe
 WinActivate, Untitled - Notepad
 WinWaitActive, Untitled - Notepad
-;Send, %A_Year%%A_MM%%A_DD%
-;SendInput, %clipboard%.
 return
 
 ;Hacer que una ventana esté siempre encima de las demás Ctrl + Shift + F8
@@ -396,6 +350,7 @@ return
 
 ;esto permite que la tecla sola siga funcionando
 $AppsKey::Send, {AppsKey}
+return
 
 ;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
 AppsKey & {::
@@ -416,10 +371,13 @@ else
 
 return
 
+
 AppsKey & F1::
 InputBox, siteName, Password Assistant, Escribe el Nombre del sitio,,,,,,, 40,
 passwordAssist(siteName)
 return
+
+
 
 AppsKey & F10::
 InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
@@ -440,10 +398,30 @@ RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
 return
 
 
+
+;;;;;;
+;;;
+;;
 AppsKey & Numpad0::
 flashOpen("ahk_class dopus.lister", "dopus.exe")
 return
 
+AppsKey & Numpad1::
+flashOpen("ahk_class OpusApp", "winword.exe")
+return
+
+AppsKey & Numpad2::
+flashOpen("ahk_class MozillaWindowClass", "firefox.exe")
+return
+
+
+AppsKey & Numpad3::
+flashOpen("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe")
+return
+
+;;
+;;;;
+;;;;;;
 
 
 AppsKey & Ins::
@@ -473,6 +451,16 @@ send,{tab}%A_MM%
 send,{tab}%A_YYYY%
 Return
 
+
+AppsKey & q::
+FormatTime, todaysDate, %A_Now%, yyyyMMdd
+send, %todaysDate%
+return
+
+AppsKey & w::
+FormatTime, todaysDate, %A_Now%, HHmm
+send, %todaysDate%
+return
 
 
 
@@ -544,8 +532,13 @@ Return
     |  ,-----------
     \_/__________/ 
  */
+RAlt::
+send, {RAlt}
+return
 
-<^>!a::
+#KeyHistory 120
+;<^>!a::
+RAlt & a::
 ;MsgBox, % GetKeyName("SC01E")
 ;MsgBox, %A_PriorKey%
 KeyHistory
@@ -553,16 +546,17 @@ return
 
 
 
+
 RAlt & ,::
     if GetKeyState("Shift", "P")  
-        send, «
+        Send, {ASC 174} ;«
     else  
     send, <
 return
 
 RAlt & .::
     if GetKeyState("Shift", "P")  
-        send, »
+        Send, {ASC 175} ;»
     else  
     send, >
 return
@@ -574,6 +568,15 @@ return
 
 
 
+
+/* 
+ / \-------------, 
+ \_,|            | 
+    |     CTRL   | 
+    |  ,-----------
+    \_/__________/ 
+ */
+
 ;Alt Tab Derecho 
 Control & XButton2::ShiftAltTab
 return
@@ -581,14 +584,14 @@ Control & XButton1::AltTab
 return
 
 
-
+/*
 if GetKeyState("Shift", "P") ;esta línea no está sirviendo podría borrarla
 RControl & }::ShiftAltTab
 return 
 
 RControl & }::AltTab
 return
-
+*/
 
 
 
@@ -652,9 +655,9 @@ return
 ;Borrar clip solo
 ;XButton1::
 ^Mbutton::
-send, ^F1
+send, ^{F1}
 sleep, 50
-send, ^F3
+send, ^{F3}
 send, ^+a
 send, v
 send, {alt down}
@@ -698,7 +701,7 @@ return
     send,^+!|
     sleep 50
     send %mitecla%
-    
+    return
 }   
 
 XButton1::
@@ -811,12 +814,14 @@ sleep 5
 
 
 #IfWinActive ahk_exe ahk_exe Explorer.EXE
+
+/*
 MButton::
 send, {RButton}
 sleep, 10
 send, e
 return
-
+*/
 
 
 

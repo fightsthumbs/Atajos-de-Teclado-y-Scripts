@@ -422,7 +422,7 @@
 	"CancelAllPreviews" = "(Esc)"
 	"New" = "(Ctrl+Alt+N)"
 	"NewVectorLayer" = "(Ctrl+Shift+3)(Ctrl+Alt+Shift+3)"
-	"OpenComp" = "(Backslash)(Yen)"
+	"OpenComp" = "(})(Backslash)(Yen)"
 	"OpenMRUContext" = "(Shift+Esc)"
 	"PreviewAudio" = "(PadDecimal)(PadComma)(PadDelete)"
 	"PreviewAudioWorkArea" = "(Alt+PadDecimal)(Alt+PadComma)(Alt+PadDelete)"
