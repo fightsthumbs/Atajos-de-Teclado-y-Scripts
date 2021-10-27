@@ -19,6 +19,18 @@ RemoveToolTip:
 ToolTip
 return
 
+;;funcion historial de búsqueda
+func_myHistory(termino, action) {
+    SetWorkingDir, D:\
+    archivo := FileOpen("AHK_history.csv", "a")
+    ;;InputBox, var_mensaje, Title, Prompt
+    FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss
+    archivo.Write("`r`n" var_fechayhora "; " action ";" termino)
+    archivo.Close()
+    SetWorkingDir %A_ScriptDir%
+    Return
+}
+
 ;;función para interar entre varias intancias de un mismo programa
 flashOpen(nombre, exe) {
 
@@ -162,7 +174,7 @@ return
 ::%name::Benjamín
 ::%ced::1-1710-0635
 
-
+:*:@temp::temp@fightsthumbs.anonaddy.com
 :*:@spam::spam@fightsthumbs.anonaddy.com
 :*:.fg.::fightsthumbs
 :*:@fg::fightsthumbs@gmail.com
@@ -381,18 +393,21 @@ return
 
 AppsKey & F10::
 InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
+func_myHistory(termino, "search")
 Sleep 50
 RunWait, https://www.google.com/search?q=%termino%
 return
 
 AppsKey & F11::
 InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo
+func_myHistory(buscarDefinicion, "definition")
 Sleep 50
 RunWait, https://www.wordreference.com/definicion/%buscarDefinicion%
 return
 
 AppsKey & F12::
 InputBox, transWord, English Word, Escribe una palabra en inglés para traducirla,,,,,,, 40, Exchange
+func_myHistory(transWord, "translate")
 Sleep 50
 RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
 return
