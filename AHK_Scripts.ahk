@@ -19,14 +19,22 @@ RemoveToolTip:
 ToolTip
 return
 
+;;funcion que permite mostrar 
+;;cual es la tecla que se está presionando mediante un tooltip
+showTooltip(x) { 
+    ToolTip You pressed %x%. 
+    SetTimer, RemoveToolTip, -1500
+    return 
+}
+
 ;;funcion historial de búsqueda
 func_myHistory(termino, action) {
     SetWorkingDir, D:\
-    archivo := FileOpen("AHK_history.csv", "a")
+    searchArchive := FileOpen("AHK_history.csv", "a")
     ;;InputBox, var_mensaje, Title, Prompt
     FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss
-    archivo.Write("`r`n" var_fechayhora "; " action ";" termino)
-    archivo.Close()
+    searchArchive.Write("`r`n" var_fechayhora ";" action ";" termino)
+    searchArchive.Close()
     SetWorkingDir %A_ScriptDir%
     Return
 }
@@ -62,6 +70,46 @@ flashOpen(nombre, exe) {
 }
  */
 
+vowelConsonantCount(siteName) {
+passwordAssist_vocales := "aeiou" ;todas las vocales
+siteLenght :=StrLen(siteName)
+;workingLetter := "j"
+vowels := 0
+consonants := 0
+Loop, %siteLenght% {
+        workingLetter := SubStr(siteName, A_Index, 1)
+        if workingLetter in a,e,i,o,u
+        vowels += 1
+        else
+        consonants += 1
+
+}
+return % vowels consonants
+}
+
+
+letterOffset(siteName) {
+    passwordAssist_Alfabet := "qwertyuiopasdfghjklzxcvbnmq" ;"abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
+    siteLenght :=StrLen(siteName)
+    ;workingLetter := "j"
+    newSiteName := ""
+
+    Loop, %siteLenght% {
+            workingLetter := SubStr(siteName, A_Index, 1)
+            ;MsgBox, %A_Index%
+            ;MsgBox, %workingLetter%
+            StringGetPos, getPosLetter, passwordAssist_Alfabet, %workingLetter%
+            getPosLetter += 2
+            ;MsgBox, %getPosLetter%
+
+            addLetter := SubStr(passwordAssist_Alfabet, getPosLetter, 1)
+            ;MsgBox, %addLetter%
+
+            newSiteName .= addLetter
+    }
+    return %newSiteName%
+    }
+
 
 passwordAssist(x) {
     passwordAssist_Alfabet := "abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
@@ -72,6 +120,13 @@ passwordAssist(x) {
     secondLetter := SubStr(x, 2, 1)
     lastLetter := SubStr(x, 0)
     passwordAssist_SpecialChar := ",.,."
+    siteLenght :=StrLen(x)
+    offsetSiteName := letterOffset(x)
+    subFirst := SubStr(offsetSiteName,1,3)
+    firstTrim := Format("{:U}", subFirst)
+    secondTrim := SubStr(offsetSiteName,-2,3)
+    letterCount := vowelConsonantCount(x)
+    
 
     StringGetPos, LetterIndex, passwordAssist_Alfabet, %firstLetter%
     StringGetPos, nDelimeter, passwordAssist_Alfabet, n
@@ -97,16 +152,54 @@ passwordAssist(x) {
     } else {
         bn := "brea"
     }
-        
-
+       
+    offsetSiteName := letterOffset(x)
     ;con := x[0].x[-1].passwordAssist_key.passwordAssist_SpecialChar.even.bn
     ;MsgBox %bn%
     sleep 30
-    send % firstLetter lastLetter passwordAssist_key passwordAssist_SpecialChar even bn
+    ;send % firstLetter lastLetter passwordAssist_key passwordAssist_SpecialChar even bn
+    finalChunk = %firstLetter%%siteLenght%%lastLetter%%firstTrim%%passwordAssist_SpecialChar%%letterCount%%secondTrim%
+    Clipboard=%finalChunk%
     return
     
 }
 
+
+
+;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+favouritePaths(x) {
+
+    if GetKeyState("LAlt", "P")
+        changeFavouritePaths(x)
+    else  
+        gotofavouritePaths(x) 
+    return
+}
+
+;;ir al la ruta favorita designada de previo
+gotofavouritePaths(x) {
+    IniRead,FilePath, D:\AHK_settings.ini, FILEPATHS, %x%Path
+    Run % FilePath
+    return
+}
+
+
+;cambiar la ruta designada
+changeFavouritePaths(x) {
+    FileSelectFolder, newFilePath, , 3
+    if newFilePath =
+    MsgBox, You didn't select a folder.
+    else
+     IniWrite, %newFilePath%, D:\AHK_settings.ini, FILEPATHS, %x%Path
+    return
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;favouritePaths END;;;;;;;;
 
 
 
@@ -201,31 +294,31 @@ $LWin::Send, {LWin}
 return
 
 
+
+
+
+
+
+
 LWin & F1::
-ToolTip You pressed %A_ThisHotkey%.
-SetTimer, RemoveToolTip, -1500
+favouritePaths("first")
 return
 
 LWin & F2::
-ToolTip You pressed %A_ThisHotkey%.
-SetTimer, RemoveToolTip, -1500
+favouritePaths("second")
 return
 
 LWin & F3::
-ToolTip You pressed %A_ThisHotkey%.
-SetTimer, RemoveToolTip, -1500
+favouritePaths("third")
 return
 
 LWin & F4::
-ToolTip You pressed %A_ThisHotkey%.
-SetTimer, RemoveToolTip, -1500
+favouritePaths("fourth")
 return
 
 LWin & F5::
-ToolTip You pressed %A_ThisHotkey%.
-SetTimer, RemoveToolTip, -1500
+showTooltip(A_ThisHotkey)
 return
-
 
 LWin & F6::
 FileSelectFolder, OutputVar, , 3
@@ -393,23 +486,35 @@ return
 
 AppsKey & F10::
 InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
-func_myHistory(termino, "search")
-Sleep 50
-RunWait, https://www.google.com/search?q=%termino%
+    if ErrorLevel 
+        return
+    else
+        func_myHistory(termino, "search")
+        Sleep 50
+        RunWait, https://www.google.com/search?q=%termino%
+        RunWait, https://www.ecosia.org/search?q=%termino%
 return
 
 AppsKey & F11::
 InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo
-func_myHistory(buscarDefinicion, "definition")
-Sleep 50
-RunWait, https://www.wordreference.com/definicion/%buscarDefinicion%
+    if ErrorLevel 
+        return
+    else
+        func_myHistory(buscarDefinicion, "definition")
+        Sleep 50
+        RunWait, https://www.wordreference.com/definicion/%buscarDefinicion%
+        RunWait, https://dle.rae.es/%buscarDefinicion%
 return
 
 AppsKey & F12::
 InputBox, transWord, English Word, Escribe una palabra en inglés para traducirla,,,,,,, 40, Exchange
-func_myHistory(transWord, "translate")
-Sleep 50
-RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
+    if ErrorLevel 
+        return
+    else
+        func_myHistory(transWord, "translate")
+        Sleep 50
+        RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
+        RunWait, https://www.spanishdict.com/translate/%transWord%
 return
 
 
@@ -417,6 +522,8 @@ return
 ;;;;;;
 ;;;
 ;;
+
+
 AppsKey & Numpad0::
 flashOpen("ahk_class dopus.lister", "dopus.exe")
 return
@@ -636,7 +743,21 @@ Browser_Home::
 Winset, Alwaysontop, , A ; Ctrl + Space
 return
 
-
+^Launch_App1::
+<^>!F12::
+/* 
+IfNotExist, D:\AHK_settings.ini
+{
+  ini=`;[Settings]
+  ini=%ini%`n`;trans="F:\02 MCOP"
+  ini=%ini%`n
+  ini=%ini%`n[Settings]
+  ini=%ini%`ntrans=150
+  FileAppend,%ini%,AHK_settings.ini
+  ini=
+}
+ */
+gotofavouritePaths("first")
 
 
 
