@@ -1,10 +1,70 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
 
+if FileExist("AHK_settings.ini")
+{ 
+} else {
+    iniFile := FileOpen("AHK_settings.ini", "w")
+    iniFileContent := "[FILEPATHS]`r`nfirstPath=`r`nsecondPath=D:\TCU`r`nthirdPath=`r`nfourthPath=`r`nfifthPath=`r`nsixthPath=`r`n[TRANSPARENT]`r`ntransValue=200"
+
+  ; When writing a file this way, use `r`n rather than `n to start a new line.
+iniFile.Write(iniFileContent)
+iniFile.Close()
+}
+
+if FileExist("AHK_PR_Presets.ini")
+{ 
+} else {
+    iniFilePR := FileOpen("AHK_PR_Presets.ini", "w")
+    iniFilePRContent := "[PRESETS]`r`nfirstPreset=`r`n"
+
+
+  ; When writing a file this way, use `r`n rather than `n to start a new line.
+iniFilePR.Write(iniFilePRContent)
+iniFilePR.Close()
+}
+
+if FileExist("AHK_history.csv")
+{ 
+
+} else {
+    csvFile := FileOpen("AHK_history.csv", "w")
+    csvFileContent := "datetime;tag;term;`r`n"
+
+  ; When writing a file this way, use `r`n rather than `n to start a new line.
+csvFile.Write(csvFileContent)
+csvFile.Close()
+}
+
+if FileExist("AHK_PR_Presets.ini")
+{ 
+} else {
+    iniFilePR := FileOpen("AHK_PR_Presets.ini", "w")
+    iniFilePRContent := "[PRESETS]`r`nfirstPreset=`r`n"
+
+
+  ; When writing a file this way, use `r`n rather than `n to start a new line.
+iniFilePR.Write(iniFilePRContent)
+iniFilePR.Close()
+}
+
+
+
+
+
+;;;;;;Include Section
+#Include, D:\Documentos\AutoHotKey Scripts\Esperanto v2.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\PasswordAssistant.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\CCKAMPUS.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\Premiere Presets.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\HotStrings.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\Create Folder Structure for Projects.ahk
+; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
+return
 /* 
  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
 ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     
@@ -13,6 +73,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║  ██║███████╗
  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
      */  
+
+
+SetWorkingDir D:\AHK_Support_Files\
+
+
+
+
+
 
 ;;subrutina para remover los tooltips
 RemoveToolTip:
@@ -27,15 +95,17 @@ showTooltip(x) {
     return 
 }
 
-;;funcion historial de búsqueda
-func_myHistory(termino, action) {
-    SetWorkingDir, D:\
-    searchArchive := FileOpen("AHK_history.csv", "a")
+;;funcion historial de búsqueda.
+func_myHistory(termino, etiqueta) {
+    ;SetWorkingDir, D:\
+    ;;Append: Creates a new file if the file didn't exist, 
+    historyFile := FileOpen("AHK_history.csv", "a") 
     ;;InputBox, var_mensaje, Title, Prompt
-    FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss
-    searchArchive.Write("`r`n" var_fechayhora ";" action ";" termino)
-    searchArchive.Close()
-    SetWorkingDir %A_ScriptDir%
+                                    
+    FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss ;;ISO 8601
+    historyFile.Write("`r`n" var_fechayhora ";" etiqueta ";" termino)
+    historyFile.Close()
+    ;SetWorkingDir %A_ScriptDir%
     Return
 }
 
@@ -51,6 +121,20 @@ flashOpen(nombre, exe) {
         return
     }
 }
+
+flashOpen2(nombre, exe, tag) {
+sleep 11 ;this is to avoid the stuck modifiers bug
+IfWinNotExist, %nombre% ;;ahk_class CabinetWClass
+    Run, %exe% ;;explorer.exe
+    GroupAdd, %tag%, %nombre%
+if WinActive("ahk_exe "exe) ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
+	GroupActivate, %tag%, r
+else
+	WinActivate %nombre% ;you have to use WinActivatebottom if you didn't create a window group.
+
+return
+}
+
 
 /* 
 flashOpen(nombre, exe) {
@@ -70,106 +154,19 @@ flashOpen(nombre, exe) {
 }
  */
 
-vowelConsonantCount(siteName) {
-passwordAssist_vocales := "aeiou" ;todas las vocales
-siteLenght :=StrLen(siteName)
-;workingLetter := "j"
-vowels := 0
-consonants := 0
-Loop, %siteLenght% {
-        workingLetter := SubStr(siteName, A_Index, 1)
-        if workingLetter in a,e,i,o,u
-        vowels += 1
-        else
-        consonants += 1
-
-}
-return % vowels consonants
-}
-
-
-letterOffset(siteName) {
-    passwordAssist_Alfabet := "qwertyuiopasdfghjklzxcvbnmq" ;"abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
-    siteLenght :=StrLen(siteName)
-    ;workingLetter := "j"
-    newSiteName := ""
-
-    Loop, %siteLenght% {
-            workingLetter := SubStr(siteName, A_Index, 1)
-            ;MsgBox, %A_Index%
-            ;MsgBox, %workingLetter%
-            StringGetPos, getPosLetter, passwordAssist_Alfabet, %workingLetter%
-            getPosLetter += 2
-            ;MsgBox, %getPosLetter%
-
-            addLetter := SubStr(passwordAssist_Alfabet, getPosLetter, 1)
-            ;MsgBox, %addLetter%
-
-            newSiteName .= addLetter
-    }
-    return %newSiteName%
-    }
-
-
-passwordAssist(x) {
-    passwordAssist_Alfabet := "abcdefghijklmnñopqrstuvwxyz" ;todo el alfabeto
-    passwordAssist_vocales := "aeiou" ;todas las vocales
-    passwordAssist_key := 0 ;
-    sitio := x
-    firstLetter := SubStr(x, 1, 1)
-    secondLetter := SubStr(x, 2, 1)
-    lastLetter := SubStr(x, 0)
-    passwordAssist_SpecialChar := ",.,."
-    siteLenght :=StrLen(x)
-    offsetSiteName := letterOffset(x)
-    subFirst := SubStr(offsetSiteName,1,3)
-    firstTrim := Format("{:U}", subFirst)
-    secondTrim := SubStr(offsetSiteName,-2,3)
-    letterCount := vowelConsonantCount(x)
-    
-
-    StringGetPos, LetterIndex, passwordAssist_Alfabet, %firstLetter%
-    StringGetPos, nDelimeter, passwordAssist_Alfabet, n
-    ;StringGetPos, OutputVar, InputVar, SearchText [, L#|R#, Offset]
-
-    if (LetterIndex < nDelimeter + 1) {
-        passwordAssist_key := "QWE"
-    } else {
-        passwordAssist_key := "ASD"
-    }
-        
-    IfInString, passwordAssist_vocales, %secondLetter%
-    {
-        even := "246"
-    } else {
-        even := "357"
-    }
-        
-
-    IfInString, passwordAssist_vocales, %lastLetter% 
-    {
-        bn := "ntrs" 
-    } else {
-        bn := "brea"
-    }
-       
-    offsetSiteName := letterOffset(x)
-    ;con := x[0].x[-1].passwordAssist_key.passwordAssist_SpecialChar.even.bn
-    ;MsgBox %bn%
-    sleep 30
-    ;send % firstLetter lastLetter passwordAssist_key passwordAssist_SpecialChar even bn
-    finalChunk = %firstLetter%%siteLenght%%lastLetter%%firstTrim%%passwordAssist_SpecialChar%%letterCount%%secondTrim%
-    Clipboard=%finalChunk%
-    return
-    
-}
 
 
 
 ;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+/* 
+[FILEPATHS]
+firstPath=
+secondPath=
+thirdPath=
+fourthPath=
+ */
 
 favouritePaths(x) {
 
@@ -182,7 +179,7 @@ favouritePaths(x) {
 
 ;;ir al la ruta favorita designada de previo
 gotofavouritePaths(x) {
-    IniRead,FilePath, D:\AHK_settings.ini, FILEPATHS, %x%Path
+    IniRead,FilePath, AHK_settings.ini, FILEPATHS, %x%Path
     Run % FilePath
     return
 }
@@ -194,12 +191,76 @@ changeFavouritePaths(x) {
     if newFilePath =
     MsgBox, You didn't select a folder.
     else
-     IniWrite, %newFilePath%, D:\AHK_settings.ini, FILEPATHS, %x%Path
+     IniWrite, %newFilePath%, AHK_settings.ini, FILEPATHS, %x%Path
     return
 }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;favouritePaths END;;;;;;;;
+
+
+
+
+
+;  ()()                         ____ 
+;  (..)                        /|o  |
+;  /\/\  GUI SET TRANSPARENCY /o|  o|
+; c\db/o...................../o_|_o_|
+                     
+
+transSlider:
+Gui, Destroy
+Gui Color, A30A0A
+Gui, Add, GroupBox, x22 y19 w170 h340 , Set transparency
+Gui, Add, Slider, x42 y49 w50 h290 vtransValue +Vertical +Thick30 +Range0-255 +Invert TickInterval15 +Center +ToolTipTop, 130 
+Gui, Add, Button, x102 y49 w90 h30 gSetTrans, SET
+Gui, Add, Button, x102 y89 w90 h30 gcurrentTransValue, Current Value
+Gui, Add, Button, x112 y189 w50 h40 gpresetTransValue1, 200
+Gui, Add, Button, x112 y239 w50 h40 gpresetTransValue2, 100
+Gui, Add, Button, x112 y289 w50 h40 gpresetTransValue3, 50
+; Generated using SmartGUI Creator 4.0
+Gui, Show, x210 y264 h378 w217, New GUI Window
+return
+
+
+SetTrans:
+    Gui Submit, NoHide
+    IniWrite, %transValue%, AHK_settings.ini, TRANSPARENT, transValue
+    Gui, Destroy
+return
+
+currentTransValue:
+    IniRead, currentTransValue, AHK_settings.ini, TRANSPARENT, transValue
+MsgBox, %currentTransValue%
+return
+
+presetTransValue1:
+
+    IniWrite, 200, AHK_settings.ini, TRANSPARENT, transValue
+    Gui, Destroy
+return
+
+presetTransValue2:
+
+    IniWrite, 100, AHK_settings.ini, TRANSPARENT, transValue
+    Gui, Destroy
+return
+
+presetTransValue3:
+
+    IniWrite, 50, AHK_settings.ini, TRANSPARENT, transValue
+    Gui, Destroy
+return
+
+
+
+/* 
+GuiClose:
+GuiEscape:
+    ExitApp
+return
+
+ */
 
 
 
@@ -242,39 +303,9 @@ Return
 
 
 
-/*
-Numpad1 & n::
-Send, %miNombre%
-Return
-
-Numpad1 & e::
-Send, %miCorreo%
-Return
-
-Numpad1 & c::
-Send, %miCarnet%
-Return
-*/
 
 
 
-;escribe el dia y el mes
-::fechahoy::
-FormatTime, todaysDate, %A_Now%, dd 'de' MMMM
-send, %todaysDate%
-return
-
-::%name::Benjamín
-::%ced::1-1710-0635
-
-:*:@temp::temp@fightsthumbs.anonaddy.com
-:*:@spam::spam@fightsthumbs.anonaddy.com
-:*:.fg.::fightsthumbs
-:*:@fg::fightsthumbs@gmail.com
-:*:@bb::benisbuying@gmail.com
-:*:@fp::ficcionpulpa@yahoo.com
-:*:@ba::balvarez@cckcentroamerica.com
-:*:@uccc::benjamin.alvarez@ucr.ac.cr
 
 
 
@@ -290,15 +321,26 @@ LWin  <#
 RWin   >#
 */
 
+
+;LWin & F7::
+;showTooltip(A_ThisHotkey)
+;return
+
+; LWin & F6::
+; FileSelectFolder, OutputVar, , 3
+; if OutputVar =
+;     MsgBox, You didn't select a folder.
+; else
+;     MsgBox, You selected folder "%OutputVar%".
+; return
+
+
+
 $LWin::Send, {LWin}
 return
 
 
-
-
-
-
-
+;;;;;;Favourite Paths;;;;;;;
 
 LWin & F1::
 favouritePaths("first")
@@ -317,41 +359,110 @@ favouritePaths("fourth")
 return
 
 LWin & F5::
-showTooltip(A_ThisHotkey)
+favouritePaths("fifth")
 return
 
 LWin & F6::
-FileSelectFolder, OutputVar, , 3
-if OutputVar =
-    MsgBox, You didn't select a folder.
-else
-    MsgBox, You selected folder "%OutputVar%".
+favouritePaths("sixth")
 return
 
 LWin & F7::
+favouritePaths("seventh")
 return
 
+LWin & F8::
+favouritePaths("eighth")
+return
 
+LWin & F9::
+favouritePaths("ninth")
+return
+
+LWin & F10::
+favouritePaths("tenth")
+return
+
+LWin & F11::
+favouritePaths("eleventh")
+return
+
+LWin & F12::
+favouritePaths("twelfth")
+return
+
+;;;;;;Favourite Paths END;;;;;;;
+
+
+
+
+
+
+
+/* 
+MyValue := 120
+
+F1::
+Gui Color, 303030
+Gui, Add, Text, , Text
+Gui, Add, Slider, vMyValue Range1-255 Thick30 TickInterval15 ToolTipRight Buddy1MyTopText, 190, 
+Gui Add, Button, ym x150 y30 w100 h40 gSetTrans, OK
+Gui Show, w300 h100, Test
+
+return
+
+SetTrans:
+    Gui Submit, NoHide
+    ;WinSet, Transparent, %MyValue%, A
+
+    ;MsgBox 0x40, Transparencia, % MyValue
+return
+
+GuiClose:
+GuiEscape:
+    ExitApp
+return
+ */
 
 transToggle	:= 0
 return
 
+
+
 LWin & Browser_Home::
 LWin & MButton::
+if GetKeyState("LAlt", "P") {
+
+ /*    InputBox, newValue
+    if newValue =
+    MsgBox, You didn't select a folder.
+    else
+    IniWrite, %newValue%, AHK_settings.ini, TRANSPARENT, transValue
+    return 
+    */
+    Gosub, transSlider
+    ;transSetValue()
+} 
+else  {
+    IniRead, MyValue, AHK_settings.ini, TRANSPARENT, transValue
+    ;MyValue := 160
 	; This is where the toggling occurs. You're setting the toggle to the opposite of itself.
 	; 1 becomes 0. True becomes False. You can use either.
-	transToggle	:= !transToggle
+    transToggle	:= !transToggle
 
 	if (transToggle = 0){
+        
 		; If the toggle is off (0 or false), do the stuff in here
-		WinSet, Transparent, 120, A
+		WinSet, Transparent, %MyValue%, A
 	}
-	else{
+	else {
 		; If the toggle is on (1 or true), do the stuff in here
 		WinSet, Transparent, Off, A
 	}
-
+}   
 return
+
+
+
 
 
 
@@ -401,11 +512,19 @@ return
 ;Buscar en Ecosia el texto seleccionado
 ^+F5::
 {
+
  Send, ^c
  Sleep 50
+ func_myHistory(clipboard, "searchFromClipboard")
  RunWait, https://www.ecosia.org/search?q=%clipboard%
- Return
+ RunWait, https://www.google.com/search?q=%clipboard%
+ 
 }
+Return
+
+; ^+F6::
+; Run, "C:\Program Files (x86)\Internet Download Manager\IDMan.exe"
+; return
 
 ;Abrir bloc de notas
 ^+F7::
@@ -419,6 +538,8 @@ return
 ^+F8:: 
 Winset, Alwaysontop, , A ; Ctrl + Space
 return
+
+
 /* 
 ^+F9::
 ;https://www.wordreference.com/definicion/exhortar
@@ -438,10 +559,15 @@ Return
 
 
 ; Subir o Bajar volumen
-+NumpadAdd:: Send {Volume_Up} ;shift + +
-+NumpadSub:: Send {Volume_Down} ;shift + -
-break::Send {Volume_Mute} ; Br*eak key mutes
++NumpadAdd:: Send {Volume_Up} return ;shift + + 
++NumpadSub:: Send {Volume_Down} return ;shift + -
+
+RButton & Mbutton::
+break::
+Send {Volume_Mute} ; Br*eak key mutes
+; send, {Esc}
 return
+
 
 
 /* 
@@ -458,23 +584,47 @@ $AppsKey::Send, {AppsKey}
 return
 
 ;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
-AppsKey & {::
-send, MCOP
-Return
+; AppsKey & {::
+; Return
 
 
-;cambiar entre las ventanas de explorador
-AppsKey & -::
-sleep 11 ;this is to avoid the stuck modifiers bug
-IfWinNotExist, ahk_class dopus.lister ;;ahk_class CabinetWClass
-	Run, dopus.exe ;;explorer.exe
-GroupAdd, taranexplorers, ahk_class dopus.lister
-if WinActive("ahk_exe dopus.exe") ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
-	GroupActivate, taranexplorers, r
-else
-	WinActivate ahk_class dopus.lister ;you have to use WinActivatebottom if you didn't create a window group.
 
+
+
+~RButton & WheelUp::
+AppsKey & WheelUp::
+;msgbox,,,you pressed F9,0.6
+;While GetKeyState("AppsKey", "p")
+;{
+    Send, {Volume_Up 3}
+    Sleep, 10 ; Add a delay if you want to increase the interval between keystokes.
+;}
 return
+
+~RButton & WheelDown::
+AppsKey & WheelDown::
+;msgbox,,,you pressed F9,0.6
+;While GetKeyState("AppsKey", "p")
+;{
+    Send, {Volume_Down 3}
+    Sleep, 10 ; Add a delay if you want to increase the interval between keystokes.
+;}
+return
+
+
+
+; ;cambiar entre las ventanas de explorador
+; AppsKey & -::
+; sleep 11 ;this is to avoid the stuck modifiers bug
+; IfWinNotExist, ahk_class dopus.lister ;;ahk_class CabinetWClass
+; 	Run, dopus.exe ;;explorer.exe
+; GroupAdd, taranexplorers, ahk_class dopus.lister
+; if WinActive("ahk_exe dopus.exe") ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
+; 	GroupActivate, taranexplorers, r
+; else
+; 	WinActivate ahk_class dopus.lister ;you have to use WinActivatebottom if you didn't create a window group.
+
+; return
 
 
 AppsKey & F1::
@@ -524,8 +674,68 @@ return
 ;;
 
 
+; ´+lñ{},.-
+
+AppsKey & 0::
+run "D:\WindowsApps\TogglO.TogglDesktop_7.5.445.0_x64__txsjqv20xc8gw\TogglDesktop\TogglDesktop.exe"
+
+Return
+
+AppsKey & '::
+run code
+Return
+
+AppsKey & NumpadAdd::
+AppsKey & ¿::
+Run, "D:\Documentos\AutoHotKey Scripts\Magnifiyer.ahk"
+Return
+
+
+AppsKey & l::
+return
+
+AppsKey & Tab::
+AppsKey & Home::
+; AppsKey & ñ::
+createFolderStructure()
+return
+
+AppsKey & ñ::
+return
+
+AppsKey & ´::
+return
+
+AppsKey & +::
+return
+
+
+
+
+
+
+AppsKey & {::
+flashOpen2("ahk_class ApplicationFrameWindow", "shell:AppsFolder\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App", "quickNotes") ;stickynotes.lnk  ;C:\Windows\explorer.exe
+return
+
+AppsKey & }::
+return
+
+AppsKey & ,::
+
+return
+
+AppsKey & .::
+
+return
+
+AppsKey & -::
+flashOpen2("ahk_class dopus.lister", "dopus.exe", "explorers")
+return
+
 AppsKey & Numpad0::
-flashOpen("ahk_class dopus.lister", "dopus.exe")
+; flashOpen("ahk_class dopus.lister", "dopus.exe")
+flashOpen2("ahk_class dopus.lister", "dopus.exe", "explorers")
 return
 
 AppsKey & Numpad1::
@@ -533,49 +743,38 @@ flashOpen("ahk_class OpusApp", "winword.exe")
 return
 
 AppsKey & Numpad2::
-flashOpen("ahk_class MozillaWindowClass", "firefox.exe")
+; flashOpen("ahk_class MozillaWindowClass", "firefox.exe")
+flashOpen2("ahk_class MozillaWindowClass", "firefox.exe", "browser")
+
 return
 
-
+AppsKey & n::
 AppsKey & Numpad3::
-flashOpen("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe")
+; flashOpen("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe")
+flashOpen2("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe", "notion")
 return
+
+
+AppsKey & Numpad4::
+flashOpen("ahk_exe IDMan.exe", "C:\Program Files (x86)\Internet Download Manager\IDMan.exe")
+return
+
+AppsKey & Numpad7::
+flashOpen("ahk_class Notepad", "notepad.exe")
+return
+
+
 
 ;;
 ;;;;
 ;;;;;;
 
 
-AppsKey & Ins::
-;este rellena los campos de la boleta de horas conferencia
 
-;miNombre := "Benjamín Álvarez Rodríguez"
-;miCorreo := "benjamin.alvarez@ucr.ac.cr"
-;miCarnet := "B60401"
-
-
-;day = FormatTime, CurrentDateTime,, dd
-;mes = FormatTime, CurrentDateTime,, MM
-;year = FormatTime, CurrentDateTime,, yyyy
-
-;listita = [global%miNombre%,%miCorreo%,%miCarnet%]
-miNombre := "Benjamín Álvarez Rodríguez"
-miCorreo := "benjamin.alvarez@ucr.ac.cr"
-miCarnet := "B60401"
-send %miCorreo%
-send,{tab}
-send %miNombre%
-send,{tab}
-send %miCarnet%
-send,{tab}
-send,{tab}%A_DD%
-send,{tab}%A_MM%
-send,{tab}%A_YYYY%
-Return
 
 
 AppsKey & q::
-FormatTime, todaysDate, %A_Now%, yyyyMMdd
+FormatTime, todaysDate, %A_Now%, yyyyMMdd ;;ISO 8601
 send, %todaysDate%
 return
 
@@ -636,6 +835,13 @@ ToolTip, Color %rgb% copiado!
 SetTimer, RemoveToolTip, -1500 ;;esto podría tambien ser un sleep y  después volver a poner un tooltip
 Return
 
+AppsKey & o::
+CoordMode, Mouse, Screen
+MouseGetPos,xPos,yPos
+Clipboard= %xPos%, %yPos%
+ToolTip, valor %xPos%x%yPos% copiado!
+SetTimer, RemoveToolTip, -1500 ;;esto podría tambien ser un sleep y  después volver a poner un tooltip
+Return
 
 
 
@@ -643,6 +849,21 @@ Return
 
 
 
+AppsKey & Up::
+send, ↑
+return
+
+AppsKey & Down::
+send, ↓
+return
+
+AppsKey & Right::
+send, →
+return
+
+AppsKey & Left::
+send, ←
+return
 
 
 
@@ -684,6 +905,12 @@ RAlt & .::
 return
 
 
+RAlt & -::
+    if GetKeyState("Shift", "P")  
+        Send, {ASC 175} ;»
+    else  
+    send, —
+return
 
 
 
@@ -745,19 +972,8 @@ return
 
 ^Launch_App1::
 <^>!F12::
-/* 
-IfNotExist, D:\AHK_settings.ini
-{
-  ini=`;[Settings]
-  ini=%ini%`n`;trans="F:\02 MCOP"
-  ini=%ini%`n
-  ini=%ini%`n[Settings]
-  ini=%ini%`ntrans=150
-  FileAppend,%ini%,AHK_settings.ini
-  ini=
-}
- */
 gotofavouritePaths("first")
+return
 
 
 
@@ -791,9 +1007,12 @@ return
 ;Borrar clip solo
 ;XButton1::
 ^Mbutton::
-send, ^{F1}
+; send, ^{F1}
+; sleep, 50
+; send, ^{F3}
+MouseClick, Middle
+MouseClick, Middle
 sleep, 50
-send, ^{F3}
 send, ^+a
 send, v
 send, {alt down}
@@ -835,7 +1054,7 @@ return
 {
     Click Middle ;pone focus en el timeline sobre el que esté el mouse
     send,^+!|
-    sleep 50
+    sleep 15
     send %mitecla%
     return
 }   
@@ -847,6 +1066,132 @@ return
 XButton2::
 reproducirTimeline("j")
 return
+
+!RButton::
+MouseClick, Middle
+if GetKeyState("LAlt", "P") = 1
+		{
+		loop
+	{
+			Send ^+!| ;in premiere, this must be set to "move playhead to cursor."
+			;Tooltip, button 5 playhead mod!
+			sleep 16 ;this loop will repeat every 16 milliseconds.
+			if GetKeyState("RButton", "P") = 0
+				{
+				;msgbox,,,time to break,1
+				;tooltip,
+                MouseClick, Right
+                return
+				; goto theEnd2
+				; break
+				}
+			}
+}
+theEnd2:
+MouseClick, middle
+Return
+
+
+
+
+
+^|::
+ToolTip, Please marquee select an area to delete
+
+; if key
+; goto canceled
+
+click_count = 0
+
+KeyWait, LButton, D ; Wait for the left mouse button to be pressed down.
+MouseGetPos, startxpos, startypos
+KeyWait, LButton, U ; Wait for the left mouse button to be pressed down.
+MouseGetPos, endxpos, endypos
+
+
+
+If (startxpos == endxpos && startypos == endypos)
+
+{
+    goto canceled
+
+}
+
+else
+
+{
+    inXPos := endxpos > startxpos ? startxpos : endxpos
+    outXPos := endxpos > startxpos ? endxpos : startxpos
+    BlockInput, On
+
+;    /*  MouseMove, %startxpos%, %startypos%
+;     sleep 20
+;     sendInput ^+!|
+;     sleep 20
+;     sendInput dc
+;     ; sendInput c
+;     sleep 20
+;     MouseMove, %endxpos%, %endypos%
+;     sleep 50
+;     sendInput ^+!|
+;     sleep 20
+;     sendInput dq
+;     ; sendInput q
+;     send {F3} 
+
+    
+    ; MouseMove, %startxpos%, %startypos%
+    MouseMove, %inXPos%, %startypos%
+    sleep 20
+    sendInput ^+a
+     sleep 10
+    sendInput ^+x
+    sleep 10
+    sendInput ^+!|
+    sleep 10
+    sendInput i
+    ; sendInput c
+    sleep 10
+    ; MouseMove, %endxpos%, %endypos%
+    MouseMove, %outXPos%, %startypos%
+    sleep 20
+    sendInput ^+!|
+    sleep 10
+    sendInput o
+     sleep 10
+    sendInput ^+a
+    sleep 10
+    sendInput {F3}
+    sleep 10
+    sendInput ^+x
+     sleep 10
+   
+
+    BlockInput, Off
+}
+
+
+; clipboard = %AHKCommand%
+ToolTip, exito!
+SetTimer, RemoveToolTip, -1500
+; MsgBox To simulate this click in AHK, use "%AHKCommand%" (This has been copied to your paste buffer). This script will exit after you dismiss this message.
+return
+
+canceled:
+ToolTip, Canceled!
+SetTimer, RemoveToolTip, -1500
+return
+
+
+^!+F1::
+send,^!{F6}
+send, ^k
+send,^!{F6 3} 
+send, q
+return
+
+;#Include, D:\Documentos\AutoHotKey Scripts\Premiere Presets.ahk
+
 
 
 /* 
@@ -884,15 +1229,15 @@ BlockInput, On
 
 SetKeyDelay, 0
 
-Sendinput, k
+sendInput, k
 Sleep 10
-Sendinput, k
+sendInput, k
 
 MouseGetPos, xposP, yposP
-sendinput, {MButton}
+sendInput, {MButton}
 sleep 5
 Send, ^F6
-Sendinput, +f
+sendInput, +f
 
 ;Any text in the Effects panel's find box has now been highlighted. There is also a blinking "text insertion point" at the end of that text. This is the vertical blinking line, or "caret."  
 if (A_CaretX = "")

@@ -1,7 +1,7 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+;SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
 
@@ -17,10 +17,14 @@ Send,_%A_Year%%A_MM%%A_DD%
 Send, {enter}
 Return
 
+
+/* 
 ^Launch_App1::
 <^>!F12::
-Run, "G:\02 MCOP"
+Run, "F:\02 MCOP"
 return
+ */
+
 
 ;<^>!F12::
 ;Run, F:\CCKAMPUS
