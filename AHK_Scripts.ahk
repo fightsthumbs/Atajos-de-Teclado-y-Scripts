@@ -63,6 +63,7 @@ iniFilePR.Close()
 #Include, D:\Documentos\AutoHotKey Scripts\Premiere Presets.ahk
 #Include, D:\Documentos\AutoHotKey Scripts\HotStrings.ahk
 #Include, D:\Documentos\AutoHotKey Scripts\Create Folder Structure for Projects.ahk
+#Include, D:\Documentos\AutoHotKey Scripts\ShutdownTimer.ahk
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
 return
 /* 
@@ -494,15 +495,16 @@ return
 */                   
                                                                       
 
-
-
-
+;subrutina Everyting
+run_everything:
+Run everything
+Exit
 
 
 ; Buscar texto seleccionado en google
 ^+F3::
-Run, D:\Archivos de Programas\Everything\Everything.exe
-Return
+Gosub, run_everything
+; return
 
 ^+F4::
 ;Run, "D:\Archivos de Programas\BRU_NoInstall\64-bit\Bulk Rename Utility.exe"
@@ -559,8 +561,8 @@ Return
 
 
 ; Subir o Bajar volumen
-+NumpadAdd:: Send {Volume_Up} return ;shift + + 
-+NumpadSub:: Send {Volume_Down} return ;shift + -
+; +NumpadAdd:: Send {Volume_Up} return ;shift + + 
+; +NumpadSub:: Send {Volume_Down} return ;shift + -
 
 RButton & Mbutton::
 break::
@@ -588,6 +590,12 @@ return
 ; Return
 
 
+
+;;;;SHUTDOWN;;;;
+AppsKey & Del::
+Gosub, shutdownTimer 
+return
+;;;;SHUTDOWN;;;;
 
 
 
@@ -963,8 +971,9 @@ return
 
 
 Browser_Search::
-Run, D:\Archivos de Programas\Everything\Everything.exe
-Return
+Gosub, run_everything
+; return
+;
 
 Browser_Home::
 Winset, Alwaysontop, , A ; Ctrl + Space
@@ -1032,6 +1041,7 @@ Send, ^+e
 send, {enter}
 return
 
+/* 
 ;In and Out for Work Area
 <^>!i::
 send,^+!9 ;asignar ctrl alt shift 9 en premiere
@@ -1041,6 +1051,8 @@ return
 <^>!o::
 send,^+!0 ;asignar ctrl alt shift 0 en premiere
 return
+ */
+
 
 ;move playhead at cursor CTRL ALT SHIFT Right Click in Premiere
 +RButton::
@@ -1079,8 +1091,10 @@ if GetKeyState("LAlt", "P") = 1
 			if GetKeyState("RButton", "P") = 0
 				{
 				;msgbox,,,time to break,1
-				;tooltip,
+				;tooltip,   
                 MouseClick, Right
+                send, {Esc} 
+                send, ^+a
                 return
 				; goto theEnd2
 				; break
