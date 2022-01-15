@@ -47,6 +47,15 @@ return
 :*:|im::🇮🇲
 
 
+:*:|cc::CCKampus
+
+;§
+;≈
+;¤∵∴∵∓∞※±⁂‡
+
+
+
+
 AppsKey & Ins::
 ;este rellena los campos de la boleta de horas conferencia
 
