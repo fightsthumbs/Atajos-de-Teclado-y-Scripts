@@ -4,7 +4,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
-
+;;Crea un archivo ini que el script utilizara como fuente de ciertas configuraciones. si el archivo ya existe se saltará este paso
 if FileExist("AHK_settings.ini")
 { 
 } else {
@@ -16,6 +16,8 @@ iniFile.Write(iniFileContent)
 iniFile.Close()
 }
 
+
+;; Crea un archivo ini con configuraciones para premiere; sobre todo relativas a los presets
 if FileExist("AHK_PR_Presets.ini")
 { 
 } else {
@@ -28,6 +30,9 @@ iniFilePR.Write(iniFilePRContent)
 iniFilePR.Close()
 }
 
+
+
+;crear un csv en el que se almacenarán las busquedas y se crearán los encabezados en el timestamp, el tipo de búsqueda y el término buscado
 if FileExist("AHK_history.csv")
 { 
 
@@ -57,15 +62,19 @@ iniFilePR.Close()
 
 
 ;;;;;;Include Section
-#Include, D:\Documentos\AutoHotKey Scripts\Esperanto v2.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\PasswordAssistant.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\CCKAMPUS.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\Premiere Presets.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\HotStrings.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\Create Folder Structure for Projects.ahk
-#Include, D:\Documentos\AutoHotKey Scripts\ShutdownTimer.ahk
+#Include, %A_LineFile%\..\Esperanto v2.ahk
+#Include, %A_LineFile%\..\PasswordAssistant.ahk
+#Include, %A_LineFile%\..\CCKAMPUS.ahk
+#Include, %A_LineFile%\..\Premiere Presets.ahk
+#Include, %A_LineFile%\..\HotStrings.ahk
+#Include, %A_LineFile%\..\Create Folder Structure for Projects.ahk
+#Include, %A_LineFile%\..\ShutdownTimer.ahk
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
 return
+
+
+
+
 /* 
  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
 ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     
