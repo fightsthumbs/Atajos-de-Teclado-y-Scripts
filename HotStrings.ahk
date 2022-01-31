@@ -17,15 +17,27 @@ FormatTime, todaysDate, %A_Now%, dd 'de' MMMM
 sendInput, %todaysDate%
 return
 
+
+:*:|nombre::
 :*:|name::
 SendInput, Benjamín Álvarez Rodríguez
 return
 
+:*:|id::
+:*:|ced::
+send, 117100635
+return
 
-::|ced::117100635
-::|phone::84926888
-::|user::fightsthumbs
 
+:*:|tel::
+:*:|phone::
+send, 84926888
+return
+
+
+:*:|user::
+send, fightsthumbs
+return
 
 
 :*:@temp::temp@fightsthumbs.anonaddy.com
