@@ -18,6 +18,13 @@ sendInput, %todaysDate%
 return
 
 
+
+:*:|isodate::
+:*:|today::
+FormatTime, todaysDate, %A_Now%, yyyyMMdd
+sendInput, %todaysDate%
+return
+
 :*:|nombre::
 :*:|name::
 SendInput, Benjamín Álvarez Rodríguez
@@ -25,21 +32,24 @@ return
 
 :*:|id::
 :*:|ced::
+:*:|dni::
 send, 117100635
 return
 
 
 :*:|tel::
 :*:|phone::
+:*:|cel::
 send, 84926888
 return
 
 
 :*:|user::
+:*:|username::
 send, fightsthumbs
 return
 
-
+:*:|email::fightsthumbs@gmail.com
 :*:@temp::temp@fightsthumbs.anonaddy.com
 :*:@spam::spam@fightsthumbs.anonaddy.com
 :*:.fg.::fightsthumbs
