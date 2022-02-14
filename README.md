@@ -10,7 +10,7 @@ Aquí podrás encontrar algunas utilidades para windows, Adobe Premiere y After 
 |AppsKey + F10   |**Búsqueda Rápida de Google**   |
 |AppsKey + F11   |**Definir Palabra en Español**   |
 |AppsKey + F12 | **Traducir Palabra Español<>Inglés**|
-||
+|Ctrl + Shift + F5| **Buscar el texto Seleccionado**|
 
 
 ## Hotstrings
@@ -22,3 +22,11 @@ user
 
 ## Esperanto Keys
 Escribe los caracteres especiales Ĉ, Ĵ,Ĥ, Ŝ, Ŭ, Ĝ utilizando la tecla altGr
+
+## Shut Timer
+Configura un temporizador para apagar el dispositivo en determinado intervalo de tiempo.
+Comando 
+Appskey + Del 
+Appskey + Supr
+
+## Premiere Presets
