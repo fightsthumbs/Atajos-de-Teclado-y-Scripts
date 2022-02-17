@@ -5,13 +5,27 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 
 
 shutdown(x) {
+    Global MyEdit
+
+    if (MyEdit > 0) {
+        msgbox, Tu computadora se reiniciará en %A_ThisLabel%.`r`nPrepárate!
+
+    RunWait, shutdown /a
+    sleep, 16
+    RunWait, shutdown /r /t %x%
+    Gui, Destroy
+    return
+    } else {
+
+    
     msgbox, Tu computadora se apagará en %A_ThisLabel%.`r`nPrepárate!
-    MsgBox, %MyEdit%
+ 
     RunWait, shutdown /a
     sleep, 16
     RunWait, shutdown /s /t %x%
     Gui, Destroy
     return
+    }
 }
 
 
@@ -29,13 +43,15 @@ Gui, Add, Button, x217 y114 w60 h50 g2h, 2h
 Gui, Add, Button, x147 y114 w60 h50 g1h, 1h
 Gui, Add, Button, x287 y114 w60 h50 g4h, 4h
 Gui, Add, Button, x7 y184 w350 h40 gCancel, Cancelar Apagado
-Gui, Add, CheckBox, vMyEdit Checked0 x12 y229 w350 h30 vMyEdit gRestart, Do you want to Restart?
+Gui, Add, CheckBox, Checked0 x12 y229 w350 h30 vMyEdit gRestart, Do you want to Restart?
 
 ; Generated using SmartGUI Creator 4.0
 Gui, Show, x292 y288 h279 w375, Shutdown Timer
 Return
 
-
+Restart:
+	GUI, 1:Submit, NoHide
+return
 
 1m:
 shutdown(60)
@@ -81,26 +97,16 @@ return
 
 
 4h:
-    if (MyEdit > 0) {
-        MsgBox, myedit=1
-    } else {
 shutdown(4*60*60)
-
-    }
 return
 
-Restart:
-MsgBox, Hello %MyEdit%
-return
+
 
 
 
 Cancel:
 ; Menu, Tray, NoIcon
 
-;
-MsgBox, %MyEdit% Hello
-;
 
 RunWait, shutdown /a
 Gui, Destroy
