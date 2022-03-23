@@ -728,22 +728,23 @@ return
 
 
 
-
+AppsKey & NumpadMult::
+RunWait, powershell saps wt.exe -verb runas
+return
 
 
 AppsKey & {::
-flashOpen2("ahk_class ApplicationFrameWindow", "shell:AppsFolder\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App", "quickNotes") ;stickynotes.lnk  ;C:\Windows\explorer.exe
+flashOpen2("Notas rápidas", "shell:AppsFolder\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe!App", "quickNotes") ;stickynotes.lnk  ;C:\Windows\explorer.exe
 return
 
 AppsKey & }::
 return
 
 AppsKey & ,::
-
+RunWait, wt.exe
 return
 
 AppsKey & .::
-
 return
 
 AppsKey & -::
@@ -1071,21 +1072,45 @@ return
 
 
 ;una función
- reproducirTimeline(mitecla)
+ reproducirTimeline(mitecla,veces:=1)
 {
     Click Middle ;pone focus en el timeline sobre el que esté el mouse
     send,^+!|
     sleep 15
-    send %mitecla%
+    Loop %veces%
+{
+    send {%mitecla%}  ; Auto-repeat consists of consecutive down-events (with no up-events).
+    Sleep 30  ; The number of milliseconds between keystrokes (or use SetKeyDelay).
+}
+    
     return
 }   
 
+
+
+
 XButton1::
-reproducirTimeline("l")
+; if GetKeyState("Shift", "P")
+;         reproducirTimeline("l", "2")
+;     else  
+    reproducirTimeline("l")  
+
+return
+
++XButton1::
+
+    reproducirTimeline("l","2")  
+
 return
 
 XButton2::
 reproducirTimeline("j")
+return
+
++XButton2::
+
+    reproducirTimeline("j","2")  
+
 return
 
 !RButton::
@@ -1146,7 +1171,7 @@ else
     inXPos := endxpos > startxpos ? startxpos : endxpos
     outXPos := endxpos > startxpos ? endxpos : startxpos
     BlockInput, On
-
+ sleep 25
 ;    /*  MouseMove, %startxpos%, %startypos%
 ;     sleep 20
 ;     sendInput ^+!|
@@ -1166,15 +1191,15 @@ else
     ; MouseMove, %startxpos%, %startypos%
     MouseMove, %inXPos%, %startypos%
     sleep 20
-    sendInput ^+a
+    sendInput ^+{x 2}
      sleep 10
-    sendInput ^+x
+    sendInput ^+{a 2}
     sleep 10
     sendInput ^+!|
     sleep 10
     sendInput i
     ; sendInput c
-    sleep 10
+    sleep 25
     ; MouseMove, %endxpos%, %endypos%
     MouseMove, %outXPos%, %startypos%
     sleep 20
@@ -1182,7 +1207,7 @@ else
     sleep 10
     sendInput o
      sleep 10
-    sendInput ^+a
+    sendInput ^+{a 2}
     sleep 10
     sendInput {F3}
     sleep 10
