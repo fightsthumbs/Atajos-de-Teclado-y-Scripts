@@ -30,3 +30,11 @@ Appskey + Del
 Appskey + Supr
 
 ## Premiere Presets
+Esta función agrega la opción de guardar ciertos presets para Adobe Premiere y agregarlos al proyecto rápidamente
+
+## Favourite Folder
+Esta función es simplemente una manera de accesar rápidamente a determinadas carpetas.
+Yo suelo utilizarlo para tener más a la mano los proyectos en los que trabajo actualmente.
+
+## Transparent Windows
+Vuelve a la ventana traslúcida
