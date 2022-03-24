@@ -4,6 +4,16 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
+
+;;variables
+
+SearchTool := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: ""}
+
+searchBy := "g|br"
+
+
+
+
 ;;Crea un archivo ini que el script utilizara como fuente de ciertas configuraciones. si el archivo ya existe se saltará este paso
 if FileExist("AHK_settings.ini")
 { 
@@ -86,8 +96,6 @@ return
 
 
 SetWorkingDir D:\AHK_Support_Files\
-
-
 
 
 
@@ -527,8 +535,14 @@ return
  Send, ^c
  Sleep 50
  func_myHistory(clipboard, "searchFromClipboard")
- RunWait, https://www.ecosia.org/search?q=%clipboard%
- RunWait, https://www.google.com/search?q=%clipboard%
+ Loop, parse, searchBy, |
+	{
+		;;msgbox, %A_LoopField%
+		searcher := SearchTool[A_LoopField]
+		RunWait % searcher clipboard
+	}
+;;RunWait, https://www.ecosia.org/search?q=%clipboard%
+ ;;RunWait, search[g]%clipboard%
  
 }
 Return
@@ -658,8 +672,14 @@ InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
     else
         func_myHistory(termino, "search")
         Sleep 50
-        RunWait, https://www.google.com/search?q=%termino%
-        RunWait, https://www.ecosia.org/search?q=%termino%
+	Loop, parse, searchBy, |
+	{
+		;;msgbox, %A_LoopField%
+		searcher := SearchTool[A_LoopField]
+		RunWait % searcher termino
+	}
+	;;RunWait % SearchTool.br termino
+        ;;RunWait % SearchTool.e termino
 return
 
 AppsKey & F11::
@@ -930,7 +950,12 @@ RAlt & -::
     send, —
 return
 
-
+RAlt & ´::
+    if GetKeyState("Shift", "P")  
+        Send, {ASC 175} ;»
+    else  
+    send, {ASC 96} ;backtick
+return
 
 
 
