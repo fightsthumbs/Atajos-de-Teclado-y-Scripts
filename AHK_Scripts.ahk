@@ -6,10 +6,9 @@ SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent start
 
 
 ;;variables
-
-SearchTool := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: ""}
-
-searchBy := "g|br"
+SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: ""}
+TRANSLATE_URL := {}
+DEFINITION_URL := {}
 
 
 
@@ -19,7 +18,7 @@ if FileExist("AHK_settings.ini")
 { 
 } else {
     iniFile := FileOpen("AHK_settings.ini", "w")
-    iniFileContent := "[FILEPATHS]`r`nfirstPath=`r`nsecondPath=D:\TCU`r`nthirdPath=`r`nfourthPath=`r`nfifthPath=`r`nsixthPath=`r`n[TRANSPARENT]`r`ntransValue=200"
+    iniFileContent := "[FILEPATHS]`r`nfirstPath=`r`nsecondPath=`r`nthirdPath=`r`nfourthPath=`r`nfifthPath=`r`nsixthPath=`r`nsevenPath=`r`neightPath=`r`nninthPath=C:\`r`ntenthPath=D:\`r`neleventhPath=E:\`r`ntwelfthPath=`r`n[TRANSPARENT]`r`ntransValue=200`r`n[SEARCH_ENGINES]`r`nsearchWith=g|br"
 
   ; When writing a file this way, use `r`n rather than `n to start a new line.
 iniFile.Write(iniFileContent)
@@ -535,11 +534,12 @@ return
  Send, ^c
  Sleep 50
  func_myHistory(clipboard, "searchFromClipboard")
- Loop, parse, searchBy, |
+ IniRead, searchEnginesArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
+ Loop, parse, searchEnginesArray, |
 	{
 		;;msgbox, %A_LoopField%
-		searcher := SearchTool[A_LoopField]
-		RunWait % searcher clipboard
+		searchWith := SEARCH_URL[A_LoopField]
+		RunWait % searchWith clipboard
 	}
 ;;RunWait, https://www.ecosia.org/search?q=%clipboard%
  ;;RunWait, search[g]%clipboard%
@@ -671,15 +671,16 @@ InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
         return
     else
         func_myHistory(termino, "search")
+        IniRead, searchEnginesArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
         Sleep 50
-	Loop, parse, searchBy, |
-	{
-		;;msgbox, %A_LoopField%
-		searcher := SearchTool[A_LoopField]
-		RunWait % searcher termino
-	}
-	;;RunWait % SearchTool.br termino
-        ;;RunWait % SearchTool.e termino
+        Loop, parse, searchEnginesArray, |
+        {
+            ;;msgbox, %A_LoopField%
+            searchWith := SEARCH_URL[A_LoopField]
+            RunWait % searchWith termino
+        }
+        ;;RunWait % SearchTool.br termino
+            ;;RunWait % SearchTool.e termino
 return
 
 AppsKey & F11::
