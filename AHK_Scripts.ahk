@@ -482,6 +482,29 @@ return
 
 
 
+;;Open Setttings file
+#!NumpadDot::
+Gui, Add, Edit, x62 y29 w340 h240 vMyEdit
+Gui, Add, Button, x62 y279 w170 h30 gSaveSettings, Save
+Gui, Add, Button, x242 y279 w160 h30 gCancel, Cancel
+FileRead, FileContents, AHK_settings.ini
+GuiControl,, MyEdit, %FileContents%
+; FileAppend, %MyEdit%, AHK_settings.ini
+Gui, Show, x403 y290 h339 w470, Edit Settings File
+Return
+; RunWait, bash vim , WorkingDir, Max|Min|Hide|UseErrorLevel, OutputVarPID]
+SaveSettings:
+    Gui Submit, NoHide
+  
+    FileDelete, AHK_settings.ini 
+    FileAppend, %MyEdit%, AHK_settings.ini 
+    Gui, Destroy
+return
+
+
+; GuiClose:
+; ExitApp
+
 
 
 
