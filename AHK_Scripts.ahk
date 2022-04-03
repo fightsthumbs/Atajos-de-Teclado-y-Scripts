@@ -485,6 +485,7 @@ return
 
 ;;Open Setttings file
 #!NumpadDot::
+Gui, Destroy
 Gui, Add, Edit, x62 y29 w340 h240 vMyEdit
 Gui, Add, Button, x62 y279 w170 h30 gSaveSettings, Save
 Gui, Add, Button, x242 y279 w160 h30 gCancel, Cancel
@@ -807,18 +808,10 @@ flashOpen2("ahk_class SALFRAME", "swriter.exe", "texteditor")
 return
 
 AppsKey & Numpad2::
-
-; flashOpen("ahk_class MozillaWindowClass", "firefox.exe")
-IniRead, defaultBrowser, AHK_settings.ini, SEARCH_ENGINES, defaultBrowser
-
-browserClass := BROWSERS_CLASS[defaultBrowser]
-browserExe := BROWSERS_EXE[defaultBrowser]
-
-; MsgBox, %browserClass% %browserExe% %defaultBrowser2%
-
-
-flashOpen2(ByRef browserClass, ByRef browserExe, "browser")
-
+    IniRead, defaultBrowser, AHK_settings.ini, SEARCH_ENGINES, defaultBrowser
+    browserClass := BROWSERS_CLASS[defaultBrowser]
+    browserExe := BROWSERS_EXE[defaultBrowser]
+    flashOpen2(ByRef browserClass, ByRef browserExe, "browser")
 return
 
 AppsKey & n::
