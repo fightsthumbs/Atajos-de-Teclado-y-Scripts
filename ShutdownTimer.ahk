@@ -7,29 +7,29 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 shutdown(x) {
     Global MyEdit
 
-    if (MyEdit > 0) {
-        msgbox, Tu computadora se reiniciará en %A_ThisLabel%.`r`nPrepárate!
-
-    RunWait, shutdown /a
-    sleep, 16
-    RunWait, shutdown /r /t %x%
-    Gui, Destroy
-    return
+    if (MyEdit < 1) {
+        msgbox, Tu computadora se apagará en %A_ThisLabel%.`r`nPrepárate!
+        RunWait, shutdown /a
+        sleep, 16
+        RunWait, shutdown /s /t %x%
+        Gui, Destroy
+        return
     } else {
-
-    
-    msgbox, Tu computadora se apagará en %A_ThisLabel%.`r`nPrepárate!
- 
-    RunWait, shutdown /a
-    sleep, 16
-    RunWait, shutdown /s /t %x%
-    Gui, Destroy
-    return
+        msgbox, Tu computadora se reiniciará en %A_ThisLabel%.`r`nPrepárate!
+        RunWait, shutdown /a
+        sleep, 16
+        RunWait, shutdown /r /t %x%
+        Gui, Destroy
+        return
     }
 }
 
 
+
+
 shutdownTimer:
+
+Gui, Destroy
 ; Menu, Tray, Icon, C:\WINDOWS\system32\shell32.dll,216 ;Set custom Script icon
 Gui, Add, Text, x12 y9 w330 h30 , Es hora de apagar. Por favor indica un tiempo para apagar el computador
 Gui, Add, Button, x7 y44 w60 h50 g1m , 1min
@@ -45,8 +45,10 @@ Gui, Add, Button, x287 y114 w60 h50 g4h, 4h
 Gui, Add, Button, x7 y184 w350 h40 gCancel, Cancelar Apagado
 Gui, Add, CheckBox, Checked0 x12 y229 w350 h30 vMyEdit gRestart, Do you want to Restart?
 
+MouseGetPos , SDVarX, SDputVarY
 ; Generated using SmartGUI Creator 4.0
-Gui, Show, x292 y288 h279 w375, Shutdown Timer
+Gui, Show, x%SDVarX% y%SDputVarY% h279 w375, Shutdown Timer
+MyEdit := 0
 Return
 
 Restart:

@@ -6,10 +6,11 @@ SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent start
 
 
 ;;variables
-SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: ""}
-TRANSLATE_URL := {}
-DEFINITION_URL := {}
-
+SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: "", m: "https://www.mojeek.com/search?q=", sp:"https://www.startpage.com/do/search?q="}
+TRANSLATE_URL := {wr: "https://www.wordreference.com/es/translation.asp?tranword=", sd:"https://www.spanishdict.com/translate/"}
+DEFINITION_URL := {rae: "https://dle.rae.es/", wr: "https://www.wordreference.com/definicion/"}
+BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge"}
+BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe"}
 
 
 
@@ -236,7 +237,7 @@ Gui, Add, Button, x112 y189 w50 h40 gpresetTransValue1, 200
 Gui, Add, Button, x112 y239 w50 h40 gpresetTransValue2, 100
 Gui, Add, Button, x112 y289 w50 h40 gpresetTransValue3, 50
 ; Generated using SmartGUI Creator 4.0
-Gui, Show, x210 y264 h378 w217, New GUI Window
+Gui, Show, x210 y264 h378 w217, Set Transparency
 return
 
 
@@ -489,13 +490,12 @@ Gui, Add, Button, x62 y279 w170 h30 gSaveSettings, Save
 Gui, Add, Button, x242 y279 w160 h30 gCancel, Cancel
 FileRead, FileContents, AHK_settings.ini
 GuiControl,, MyEdit, %FileContents%
-; FileAppend, %MyEdit%, AHK_settings.ini
+
 Gui, Show, x403 y290 h339 w470, Edit Settings File
 Return
-; RunWait, bash vim , WorkingDir, Max|Min|Hide|UseErrorLevel, OutputVarPID]
+
 SaveSettings:
     Gui Submit, NoHide
-  
     FileDelete, AHK_settings.ini 
     FileAppend, %MyEdit%, AHK_settings.ini 
     Gui, Destroy
@@ -563,6 +563,7 @@ return
 		;;msgbox, %A_LoopField%
 		searchWith := SEARCH_URL[A_LoopField]
 		RunWait % searchWith clipboard
+        sleep 15
 	}
 ;;RunWait, https://www.ecosia.org/search?q=%clipboard%
  ;;RunWait, search[g]%clipboard%
@@ -801,12 +802,22 @@ flashOpen2("ahk_class dopus.lister", "dopus.exe", "explorers")
 return
 
 AppsKey & Numpad1::
-flashOpen("ahk_class OpusApp", "winword.exe")
+; flashOpen("ahk_class OpusApp", "winword.exe")
+flashOpen2("ahk_class SALFRAME", "swriter.exe", "texteditor")
 return
 
 AppsKey & Numpad2::
+
 ; flashOpen("ahk_class MozillaWindowClass", "firefox.exe")
-flashOpen2("ahk_class MozillaWindowClass", "firefox.exe", "browser")
+IniRead, defaultBrowser, AHK_settings.ini, SEARCH_ENGINES, defaultBrowser
+
+browserClass := BROWSERS_CLASS[defaultBrowser]
+browserExe := BROWSERS_EXE[defaultBrowser]
+
+; MsgBox, %browserClass% %browserExe% %defaultBrowser2%
+
+
+flashOpen2(ByRef browserClass, ByRef browserExe, "browser")
 
 return
 
