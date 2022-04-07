@@ -154,37 +154,9 @@ return
 }
 
 
-/* 
-flashOpen(nombre, exe) {
-    groupName:= %exe% . _group
-    sleep 11 ;this is to avoid the stuck modifiers bug
-    IfWinNotExist, %nombre% ;;ahk_class CabinetWClass
-        Run, %exe% ;;explorer.exe
-    GroupAdd, groupName, %nombre%
-    prog:= ahk_exe  . %exe%
-    
-    if WinActive(prog) ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
-        GroupActivate, groupName, r
-    else
-        WinActivate %nombre% ;you have to use WinActivatebottom if you didn't create a window group.
-
-    return
-}
- */
-
-
-
-
 ;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-/* 
-[FILEPATHS]
-firstPath=
-secondPath=
-thirdPath=
-fourthPath=
- */
 
 favouritePaths(x) {
 
@@ -207,7 +179,7 @@ gotofavouritePaths(x) {
 changeFavouritePaths(x) {
     FileSelectFolder, newFilePath, , 3
     if newFilePath =
-    MsgBox, You didn't select a folder.
+    MsgBox, You didn't select a folder. The path will stay the same.
     else
      IniWrite, %newFilePath%, AHK_settings.ini, FILEPATHS, %x%Path
     return
@@ -489,10 +461,11 @@ Gui, Destroy
 Gui, Add, Edit, x62 y29 w340 h240 vMyEdit
 Gui, Add, Button, x62 y279 w170 h30 gSaveSettings, Save
 Gui, Add, Button, x242 y279 w160 h30 gCancel, Cancel
+Gui, Add, Button, x410 y29 w80 h100 gOpenHistory, Open History
 FileRead, FileContents, AHK_settings.ini
 GuiControl,, MyEdit, %FileContents%
 
-Gui, Show, x403 y290 h339 w470, Edit Settings File
+Gui, Show, x403 y290 h380 w500, Edit Settings File
 Return
 
 SaveSettings:
@@ -503,25 +476,17 @@ SaveSettings:
 return
 
 
+OpenHistory:
+    Gui Submit, NoHide
+    RunWait, AHK_history.csv
+    Gui, Destroy
+return    
+
+
+
+
 ; GuiClose:
 ; ExitApp
-
-
-
-
-
-/*
-LWin & Browser_Home::
-LWin & MButton::
-;Winset, Alwaysontop, , A ; Ctrl + Space 
-WinSet, Transparent, 30, A
-return
-
-LWin & RButton::
-;Winset, Alwaysontop, , A ; Ctrl + Space 
-WinSet, Transparent, Off, A
-return
-*/
 
 
 
@@ -656,22 +621,7 @@ AppsKey & WheelDown::
 return
 
 
-
-; ;cambiar entre las ventanas de explorador
-; AppsKey & -::
-; sleep 11 ;this is to avoid the stuck modifiers bug
-; IfWinNotExist, ahk_class dopus.lister ;;ahk_class CabinetWClass
-; 	Run, dopus.exe ;;explorer.exe
-; GroupAdd, taranexplorers, ahk_class dopus.lister
-; if WinActive("ahk_exe dopus.exe") ;;"ahk_exe explorer.exe" esto se debe cambiar por el sistema de explorador de archivos
-; 	GroupActivate, taranexplorers, r
-; else
-; 	WinActivate ahk_class dopus.lister ;you have to use WinActivatebottom if you didn't create a window group.
-
-; return
-
-
-;; función que returna una variable que contiene el ejecutable del buscador por defecto
+;; función que retorna una variable que contiene el ejecutable del buscador por defecto
 defaultBrowser_whatis() {
     IniRead, defaultBrowser_Key, AHK_settings.ini, SEARCH_ENGINES, searchBrowser
     Return defaultBrowser_Key
