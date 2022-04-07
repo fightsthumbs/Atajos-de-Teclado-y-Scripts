@@ -562,13 +562,11 @@ return
  Loop, parse, searchEnginesArray, |
 	{
 		;;msgbox, %A_LoopField%
+        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
 		searchWith := SEARCH_URL[A_LoopField]
-		RunWait % searchWith clipboard
+		RunWait, %defaultBrowser% " " `"%searchWith% %clipboard%`"
         sleep 15
 	}
-;;RunWait, https://www.ecosia.org/search?q=%clipboard%
- ;;RunWait, search[g]%clipboard%
- 
 }
 Return
 
@@ -672,6 +670,8 @@ return
 
 ; return
 
+
+;; función que returna una variable que contiene el ejecutable del buscador por defecto
 defaultBrowser_whatis() {
     IniRead, defaultBrowser_Key, AHK_settings.ini, SEARCH_ENGINES, searchBrowser
     Return defaultBrowser_Key

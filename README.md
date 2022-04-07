@@ -5,6 +5,12 @@ Aquí podrás encontrar algunas utilidades para windows, Adobe Premiere y After 
 
 
 ## Hot Search | Search History
+Esta función permite realizar tres tipos de búsqueda rápida:
+
+* Búsqueda de una palabra, frase, concepto, etc. Através de un búscador como Google o DuckDuckGo
+* Búsqueda de definiciones de palabras en español. En el Diccionario de la RAE y en WordReference
+* Búsqueda de traducciones de palabras o frases EN<>>ES.
+
 | Comando  |Función   |
 | ------------ | ------------ |
 |AppsKey + F10   |**Búsqueda Rápida de Google**   |
@@ -24,17 +30,11 @@ user
 Escribe los caracteres especiales Ĉ, Ĵ,Ĥ, Ŝ, Ŭ, Ĝ utilizando la tecla altGr
 
 ## Shut Timer
-Configura un temporizador para apagar el dispositivo en determinado intervalo de tiempo.
+Configura un temporizador para apagar o reiniciar el dispositivo en determinado intervalo de tiempo.
+
+
 Comando 
 Appskey + Del 
 Appskey + Supr
 
 ## Premiere Presets
-Esta función agrega la opción de guardar ciertos presets para Adobe Premiere y agregarlos al proyecto rápidamente
-
-## Favourite Folder
-Esta función es simplemente una manera de accesar rápidamente a determinadas carpetas.
-Yo suelo utilizarlo para tener más a la mano los proyectos en los que trabajo actualmente.
-
-## Transparent Windows
-Vuelve a la ventana traslúcida
