@@ -9,8 +9,8 @@ SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent start
 SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: "", m: "https://www.mojeek.com/search?q=", sp:"https://www.startpage.com/do/search?q="}
 TRANSLATE_URL := {wr: "https://www.wordreference.com/es/translation.asp?tranword=", sd:"https://www.spanishdict.com/translate/"}
 DEFINITION_URL := {rae: "https://dle.rae.es/", wr: "https://www.wordreference.com/definicion/"}
-BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge"}
-BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe"}
+BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge", chrome: "chrome.exe"}
+BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe", chrome: "ahk_exe chrome.exe"}
 
 
 
@@ -592,25 +592,15 @@ return
 
 /* 
 ^+F9::
-;https://www.wordreference.com/definicion/exhortar
-InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo
-Sleep 50
-RunWait, https://www.wordreference.com/definicion/%buscarDefinicion%
 return
  */
 
 ^+F10::
-Run, https://docs.google.com/spreadsheets/d/1fLjBlydZqBI3BuLHNnAzKuXc9KiibazEfixZzxz-WSY/edit?usp=sharing
 Return
 
 ^+F11::
-Run, https://docs.google.com/forms/d/e/1FAIpQLSfPFDuwvwIOV6xOKztveLyE_1Uzk6mkYs0ZvIsLnkE_xdvGLQ/viewform
 Return
 
-
-; Subir o Bajar volumen
-; +NumpadAdd:: Send {Volume_Up} return ;shift + + 
-; +NumpadSub:: Send {Volume_Down} return ;shift + -
 
 RButton & Mbutton::
 break::
@@ -682,6 +672,10 @@ return
 
 ; return
 
+defaultBrowser_whatis() {
+    IniRead, defaultBrowser_Key, AHK_settings.ini, SEARCH_ENGINES, searchBrowser
+    Return defaultBrowser_Key
+}
 
 AppsKey & F1::
 InputBox, siteName, Password Assistant, Escribe el Nombre del sitio,,,,,,, 40,
@@ -702,7 +696,9 @@ InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
         {
             ;;msgbox, %A_LoopField%
             searchWith := SEARCH_URL[A_LoopField]
-            RunWait % searchWith termino
+            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+            searchTerm := searchWith termino
+            RunWait, %defaultBrowser% `"%searchTerm%`"
         }
         ;;RunWait % SearchTool.br termino
             ;;RunWait % SearchTool.e termino
@@ -715,8 +711,9 @@ InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su signific
     else
         func_myHistory(buscarDefinicion, "definition")
         Sleep 50
-        RunWait, https://www.wordreference.com/definicion/%buscarDefinicion%
-        RunWait, https://dle.rae.es/%buscarDefinicion%
+        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+        RunWait, %defaultBrowser% `"https://www.wordreference.com/definicion/%buscarDefinicion%`"
+        RunWait, %defaultBrowser% `"https://dle.rae.es/%buscarDefinicion%`"
 return
 
 AppsKey & F12::
@@ -726,8 +723,9 @@ InputBox, transWord, English Word, Escribe una palabra en inglés para traducirl
     else
         func_myHistory(transWord, "translate")
         Sleep 50
-        RunWait, https://www.wordreference.com/es/translation.asp?tranword=%transWord%
-        RunWait, https://www.spanishdict.com/translate/%transWord%
+        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+        RunWait, %defaultBrowser% `"https://www.wordreference.com/es/translation.asp?tranword=%transWord%`"
+        RunWait, %defaultBrowser% `"https://www.spanishdict.com/translate/%transWord%`"
 return
 
 
