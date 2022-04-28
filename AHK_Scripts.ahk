@@ -72,13 +72,14 @@ iniFilePR.Close()
 
 
 ;;;;;;Include Section
-#Include, %A_LineFile%\..\Esperanto v2.ahk
+#Include, %A_LineFile%\..\esperanto_keys.ahk
 #Include, %A_LineFile%\..\PasswordAssistant.ahk
-#Include, %A_LineFile%\..\CCKAMPUS.ahk
-#Include, %A_LineFile%\..\Premiere Presets.ahk
+#Include, %A_LineFile%\..\misc_hotstrings.ahk
+#Include, %A_LineFile%\..\premiere_presets.ahk
 #Include, %A_LineFile%\..\HotStrings.ahk
-#Include, %A_LineFile%\..\Create Folder Structure for Projects.ahk
+#Include, %A_LineFile%\..\mk_project_folder_structure.ahk
 #Include, %A_LineFile%\..\ShutdownTimer.ahk
+#Include, %A_LineFile%\..\pdf_paste_fix.ahk
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
 return
 
