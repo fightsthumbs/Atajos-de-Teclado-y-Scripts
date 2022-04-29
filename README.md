@@ -34,7 +34,17 @@ Configura un temporizador para apagar o reiniciar el dispositivo en determinado 
 
 
 Comando 
-Appskey + Del 
-Appskey + Supr
+
+`Appskey + Del `
+
+`Appskey + Supr`
 
 ## Premiere Presets
+
+
+## PDF FIX PASTE
+Resuelve los problemas al copiar texto desde un pdf.
+Pega el texto con el siguiente comando:
+`CTRL + WIN + V`
+
+y automáticamente se eliminarán los saltos de línea innecesario.
