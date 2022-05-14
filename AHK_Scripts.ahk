@@ -6,7 +6,7 @@ SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent start
 
 
 ;;variables
-SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: "", m: "https://www.mojeek.com/search?q=", sp:"https://www.startpage.com/do/search?q="}
+SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: "", m: "https://www.mojeek.com/search?q=", sp:"https://www.startpage.com/do/search?q=", you:"https://you.com/search?q="}
 TRANSLATE_URL := {wr: "https://www.wordreference.com/es/translation.asp?tranword=", sd:"https://www.spanishdict.com/translate/", old:"https://www.oxfordlearnersdictionaries.com/definition/english/",cd:"https://dictionary.cambridge.org/dictionary/spanish-english/"}
 DEFINITION_URL := {rae: "https://dle.rae.es/", wr: "https://www.wordreference.com/definicion/", dic: "https://www.diccionarios.com/diccionario/espanol/"}
 ESPO_URL := {revo: "https://www.reta-vortaro.de/revo/dlg/index-1g.html?q=", piv: "https://vortaro.net/#"}
@@ -77,7 +77,8 @@ iniFilePR.Close()
 #Include, %A_LineFile%\..\PasswordAssistant.ahk
 #Include, %A_LineFile%\..\misc_hotstrings.ahk
 #Include, %A_LineFile%\..\premiere_presets.ahk
-#Include, %A_LineFile%\..\HotStrings.ahk
+#Include, %A_LineFile%\..\hotStrings.ahk
+#Include, %A_LineFile%\..\hotStrings_priv.ahk
 #Include, %A_LineFile%\..\mk_project_folder_structure.ahk
 #Include, %A_LineFile%\..\ShutdownTimer.ahk
 #Include, %A_LineFile%\..\pdf_paste_fix.ahk
