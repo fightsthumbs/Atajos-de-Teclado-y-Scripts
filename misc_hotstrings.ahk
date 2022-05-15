@@ -3,21 +3,6 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 ;SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-
-
-
-
-;Rename for CCK
-^+F1::
-Send,^a
-Send,^x
-Send, CCKampus_
-Send, %clipboard%
-Send,_%A_Year%%A_MM%%A_DD%
-Send, {enter}
-Return
-
-
 /* 
 ^Launch_App1::
 <^>!F12::
