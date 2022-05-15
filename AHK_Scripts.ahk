@@ -526,10 +526,10 @@ return
  Send, ^c
  Sleep 50
  func_myHistory(clipboard, "searchFromClipboard")
- IniRead, searchEnginesArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
- Loop, parse, searchEnginesArray, |
+ IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
+ Loop, parse, optionsArray, |
 	{
-		;;msgbox, %A_LoopField%
+		
         defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
 		searchWith := SEARCH_URL[A_LoopField]
 		RunWait, %defaultBrowser% " " `"%searchWith% %clipboard%`"
@@ -643,11 +643,10 @@ InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
         return
     else
         func_myHistory(termino, "search")
-        IniRead, searchEnginesArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
+        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
         Sleep 50
-        Loop, parse, searchEnginesArray, |
+        Loop, parse, optionsArray, |
         {
-            ;;msgbox, %A_LoopField%
             searchWith := SEARCH_URL[A_LoopField]
             defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
             searchTerm := searchWith termino
@@ -663,10 +662,15 @@ InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su signific
         return
     else
         func_myHistory(buscarDefinicion, "definition")
+        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, definitionWith
         Sleep 50
-        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-        RunWait, %defaultBrowser% `"https://www.wordreference.com/definicion/%buscarDefinicion%`"
-        RunWait, %defaultBrowser% `"https://dle.rae.es/%buscarDefinicion%`"
+        Loop, parse, optionsArray, |
+        {
+            searchWith := DEFINITION_URL[A_LoopField]
+            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+            searchTerm := searchWith buscarDefinicion
+            RunWait, %defaultBrowser% `"%searchTerm%`"
+        }
 return
 
 AppsKey & F12::
@@ -675,12 +679,34 @@ InputBox, transWord, English Word, Escribe una palabra en inglés para traducirl
         return
     else
         func_myHistory(transWord, "translate")
+        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, translateWith
         Sleep 50
-        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-        RunWait, %defaultBrowser% `"https://www.wordreference.com/es/translation.asp?tranword=%transWord%`"
-        RunWait, %defaultBrowser% `"https://www.spanishdict.com/translate/%transWord%`"
+        Loop, parse, optionsArray, |
+        {
+            searchWith := TRANSLATE_URL[A_LoopField]
+            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+            searchTerm := searchWith transWord
+            RunWait, %defaultBrowser% `"%searchTerm%`"
+        }
 return
 
+
+AppsKey & PrintScreen::
+InputBox, esperantoVorto, Esperanto Vortaro, Escribe una palabra en esperanto para traducirla,,,,,,, 40, Saluton
+    if ErrorLevel 
+        return
+    else
+        func_myHistory(esperantoVorto, "esperanto")
+        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, espoWith
+        Sleep 50
+        Loop, parse, optionsArray, |
+        {
+            searchWith := ESPO_URL[A_LoopField]
+            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+            searchTerm := searchWith esperantoVorto
+            RunWait, %defaultBrowser% `"%searchTerm%`"
+        }
+return
 
 
 ;;;;;;
