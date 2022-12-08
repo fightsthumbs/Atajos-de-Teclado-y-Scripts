@@ -10,6 +10,7 @@ SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org
 TRANSLATE_URL := {wr: "https://www.wordreference.com/es/translation.asp?tranword=", sd:"https://www.spanishdict.com/translate/", old:"https://www.oxfordlearnersdictionaries.com/definition/english/",cd:"https://dictionary.cambridge.org/dictionary/spanish-english/",forvo:"https://forvo.com/search/"}
 DEFINITION_URL := {rae: "https://dle.rae.es/", wr: "https://www.wordreference.com/definicion/", dic: "https://www.diccionarios.com/diccionario/espanol/"}
 ESPO_URL := {revo: "https://www.reta-vortaro.de/revo/dlg/index-1g.html?q=", piv: "https://vortaro.net/#"}
+ITA_URL := {treccani: "https://www.treccani.it/enciclopedia/ricerca/", corriere: "https://dizionari.corriere.it/dizionario_italiano/D/", wr: "https://www.wordreference.com/ites/", conj: "https://www.coniugazione.it/verbo/"}
 BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge", chrome: "chrome.exe"}
 BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe", chrome: "ahk_exe chrome.exe"}
 
@@ -704,6 +705,23 @@ InputBox, esperantoVorto, Esperanto Vortaro, Entajpu vorton en Esperanto por ser
             searchWith := ESPO_URL[A_LoopField]
             defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
             searchTerm := searchWith esperantoVorto
+            RunWait, %defaultBrowser% `"%searchTerm%`"
+        }
+return
+
+AppsKey & i::
+InputBox, parolaItaliana, Dizionario Italiano, Scrivi una parola in italiano,,,,,,, 40, dosso
+    if ErrorLevel 
+        return
+    else
+        func_myHistory(parolaItaliana, "italiano")
+        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, itaWith
+        Sleep 50
+        Loop, parse, optionsArray, |
+        {
+            searchWith := ITA_URL[A_LoopField]
+            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+            searchTerm := searchWith parolaItaliana
             RunWait, %defaultBrowser% `"%searchTerm%`"
         }
 return
