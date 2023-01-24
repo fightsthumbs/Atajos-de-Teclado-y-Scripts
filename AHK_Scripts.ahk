@@ -83,6 +83,7 @@ iniFilePR.Close()
 #Include, %A_LineFile%\..\mk_project_folder_structure.ahk
 #Include, %A_LineFile%\..\ShutdownTimer.ahk
 #Include, %A_LineFile%\..\pdf_paste_fix.ahk
+#Include, %A_LineFile%\..\SpotifyGlobalKeys.ahk
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
 return
 
