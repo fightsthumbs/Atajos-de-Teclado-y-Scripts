@@ -39,8 +39,8 @@ Gui, Add, Button, x217 y44 w60 h50 g10m, 10min
 Gui, Add, Button, x287 y44 w60 h50 g15m, 15min
 Gui, Add, Button, x7 y114 w60 h50 g30m, 30min
 Gui, Add, Button, x77 y114 w60 h50 g45m, 45min
-Gui, Add, Button, x217 y114 w60 h50 g2h, 2h
-Gui, Add, Button, x147 y114 w60 h50 g1h, 1h
+Gui, Add, Button, x147 y114 w60 h50 g2h, 2h
+Gui, Add, Button, x217 y114 w60 h50 g1h, 1h
 Gui, Add, Button, x287 y114 w60 h50 g4h, 4h
 Gui, Add, Button, x7 y184 w350 h40 gCancel, Cancelar Apagado
 Gui, Add, CheckBox, Checked0 x12 y229 w350 h30 vMyEdit gRestart, Do you want to Restart?
