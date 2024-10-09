@@ -20,13 +20,17 @@ WinGetTitle, bookTitle
 bookName := SubStr(StrReplace(bookTitle, A_Space, ""), 1 , 10)
 ;;;MsgBox, ,, %bookName%
 bookFileName :=  bookName . "_Notes.txt"
+
+;;obtener el número de la página
+ControlGetText, bookCurrentPage, Edit1 
+
 ;;;MsgBox,,, %bookFileName%
 bookNotes := FileOpen(bookFileName, "a") 
     ;;InputBox, var_mensaje, Title, Prompt
                                     
     FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss ;;ISO 8601
 
-    bookNotes.Write("`r`n" var_fechayhora "`r`n"  clipboard "`r`n")
+    bookNotes.Write("`r`n" var_fechayhora " / page " bookCurrentPage "`r`n"  clipboard "`r`n")
     bookNotes.Close()
     ;SetWorkingDir %A_ScriptDir%
     ToolTip % "saved in " . bookFileName,     70, 70
