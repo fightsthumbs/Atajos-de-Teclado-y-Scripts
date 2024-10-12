@@ -1,19 +1,12 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir D:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent starting directory.
+SetWorkingDir G:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent starting directory.
 
 
 
 ;;variables
-SEARCH_URL := {g: "https://www.google.com/search?q=", e: "https://www.ecosia.org/search?q=", d:"https://duckduckgo.com/?q=", br: "https://search.brave.com/search?q=", q: "https://www.qwant.com/?q=", w: "", m: "https://www.mojeek.com/search?q=", sp:"https://www.startpage.com/do/search?q=", you:"https://you.com/search?q="}
-TRANSLATE_URL := {wr: "https://www.wordreference.com/es/translation.asp?tranword=", sd:"https://www.spanishdict.com/translate/", old:"https://www.oxfordlearnersdictionaries.com/definition/english/",cd:"https://dictionary.cambridge.org/dictionary/spanish-english/",forvo:"https://forvo.com/search/"}
-DEFINITION_URL := {rae: "https://dle.rae.es/", wr: "https://www.wordreference.com/definicion/", dic: "https://www.diccionarios.com/diccionario/espanol/"}
-ESPO_URL := {revo: "https://www.reta-vortaro.de/revo/dlg/index-1g.html?q=", piv: "https://vortaro.net/#"}
-ITA_URL := {treccani: "https://www.treccani.it/enciclopedia/ricerca/", corriere: "https://dizionari.corriere.it/dizionario_italiano/D/", wr: "https://www.wordreference.com/ites/", conj: "https://www.coniugazione.it/verbo/"}
-BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge", chrome: "chrome.exe"}
-BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe", chrome: "ahk_exe chrome.exe"}
-
+#Include, %A_LineFile%\..\variables.ahk
 
 
 ;;Crea un archivo ini que el script utilizara como fuente de ciertas configuraciones. si el archivo ya existe se saltará este paso
@@ -74,6 +67,7 @@ iniFilePR.Close()
 
 
 ;;;;;;Include Section
+
 #Include, %A_LineFile%\..\esperanto_keys.ahk
 #Include, %A_LineFile%\..\PasswordAssistant.ahk
 #Include, %A_LineFile%\..\misc_hotstrings.ahk
@@ -84,6 +78,8 @@ iniFilePR.Close()
 #Include, %A_LineFile%\..\ShutdownTimer.ahk
 #Include, %A_LineFile%\..\pdf_paste_fix.ahk
 #Include, %A_LineFile%\..\SpotifyGlobalKeys.ahk
+;
+
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
 return
 
@@ -100,7 +96,7 @@ return
      */  
 
 
-SetWorkingDir D:\AHK_Support_Files\
+SetWorkingDir G:\AHK_Support_Files\
 
 
 
@@ -465,8 +461,14 @@ return
 Gui, Destroy
 Gui, Add, Edit, x62 y29 w340 h240 vMyEdit
 Gui, Add, Button, x62 y279 w170 h30 gSaveSettings, Save
+
 Gui, Add, Button, x242 y279 w160 h30 gCancel, Cancel
-Gui, Add, Button, x410 y29 w80 h100 gOpenHistory, Open History
+Gui, Add, Button, x410 y30 w80 h49 gOpenHistory, Open History
+Gui, Add, Button, x410 y80 w80 h49 gOpenSettings, Open Settings
+Gui, Add, Button, x410 y130 w80 h49 gOpenVariables, Open Variables
+Gui, Add, Button, x410 y180 w80 h49 gOpenPremierePresets, PR Presets
+Gui, Add, Button, x410 y230 w80 h49 gOpenSettings, Free Button
+Gui, Add, Button, x410 y280 w80 h49 gOpenSettings, Free Button
 FileRead, FileContents, AHK_settings.ini
 GuiControl,, MyEdit, %FileContents%
 
@@ -487,8 +489,23 @@ OpenHistory:
     Gui, Destroy
 return    
 
+OpenSettings:
+    Gui Submit, NoHide
+    RunWait, AHK_history.csv
+    Gui, Destroy
+return
 
+OpenVariables:
+    Gui Submit, NoHide
+    Run "notepad" "%A_LineFile%\..\variables.ahk"
+    Gui, Destroy
+return
 
+OpenPremierePresets:
+    Gui Submit, NoHide
+    Run "notepad" AHK_PR_Presets.ini
+    Gui, Destroy
+return
 
 ; GuiClose:
 ; ExitApp
@@ -740,7 +757,7 @@ KeyHistory
 return
 
 AppsKey & 0::
-run "D:\WindowsApps\TogglO.TogglDesktop_7.5.445.0_x64__txsjqv20xc8gw\TogglDesktop\TogglDesktop.exe"
+;run 
 
 Return
 
@@ -750,7 +767,7 @@ Return
 
 AppsKey & NumpadAdd::
 AppsKey & ¿::
-Run, "D:\Documentos\AutoHotKey Scripts\Magnifiyer.ahk"
+Run, "%A_LineFile%\..\Magnifiyer.ahk"
 Return
 
 
@@ -817,7 +834,7 @@ return
 AppsKey & n::
 AppsKey & Numpad3::
 ; flashOpen("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe")
-flashOpen2("ahk_exe Notion.exe", "C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe", "notion")
+flashOpen2("ahk_exe Notion.exe", "C:\Users\fight\AppData\Local\Programs\Notion\Notion.exe", "notion")
 return
 
 
@@ -1052,10 +1069,10 @@ return
 ██╔═══╝ ██╔══██╗██╔══╝  ██║╚██╔╝██║██║██╔══╝  ██╔══██╗██╔══╝  
 ██║     ██║  ██║███████╗██║ ╚═╝ ██║██║███████╗██║  ██║███████╗
 ╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
-        */                                                       
+*/                                                       
 
 
-
+#Include, %A_LineFile%\..\media_info.ahk
 
 #IfWinActive ahk_exe Adobe Premiere Pro.exe
 ;F3 para borrar el clip debajo del playhead
@@ -1067,6 +1084,7 @@ return
  
 ;Borrar clip solo
 ;XButton1::
+
 ^Mbutton::
 ; send, ^{F1}
 ; sleep, 50
@@ -1127,9 +1145,6 @@ return
     
     return
 }   
-
-
-
 
 XButton1::
 ; if GetKeyState("Shift", "P")
@@ -1385,6 +1400,10 @@ sleep 5
 
 
 #IfWinActive ahk_exe ahk_exe Explorer.EXE
+Return
+
+#Include, %A_LineFile%\..\bookmarksNotes.ahk
+Return
 
 /*
 MButton::
