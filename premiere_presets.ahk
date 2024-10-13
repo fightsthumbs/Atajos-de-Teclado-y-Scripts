@@ -83,7 +83,7 @@ sendPresetName(x) {
 changePresetName(x) {
     InputBox, presetName
     if presetName =
-    MsgBox, You didn't select a folder.
+    MsgBox, No preset Selected.
     else
      IniWrite, %presetName%, AHK_PR_Presets.ini, PRESETS, %x%Preset
     return
