@@ -467,7 +467,7 @@ Gui, Add, Button, x410 y30 w80 h49 gOpenHistory, Open History
 Gui, Add, Button, x410 y80 w80 h49 gOpenSettings, Open Settings
 Gui, Add, Button, x410 y130 w80 h49 gOpenVariables, Open Variables
 Gui, Add, Button, x410 y180 w80 h49 gOpenPremierePresets, PR Presets
-Gui, Add, Button, x410 y230 w80 h49 gOpenSettings, Free Button
+Gui, Add, Button, x410 y230 w80 h49 gOpenNotes, Book Notes
 Gui, Add, Button, x410 y280 w80 h49 gOpenSettings, Free Button
 FileRead, FileContents, AHK_settings.ini
 GuiControl,, MyEdit, %FileContents%
@@ -506,6 +506,33 @@ OpenPremierePresets:
     Run "notepad" AHK_PR_Presets.ini
     Gui, Destroy
 return
+
+OpenNotes:
+Gui, Destroy
+    Gui, Add, ListView, r20 w700 gMyListView, Name|Size (KB)
+    Loop, %A_WorkingDir%\*.txt*
+        LV_Add("", A_LoopFileName, A_LoopFileSizeKB)
+    ; Gui, Destroy
+
+    LV_ModifyCol()  ; Auto-size each column to fit its contents.
+    LV_ModifyCol(2, "Integer")  ; For sorting purposes, indicate that column 2 is an integer.
+
+; Display the window and return. The script will be notified whenever the user double clicks a row.
+Gui, Show
+return
+
+MyListView:
+if (A_GuiEvent = "DoubleClick")
+{
+    LV_GetText(RowText, A_EventInfo)  ; Get the text from the row's first field.
+    RunWait, %RowText%
+    ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
+    SetTimer, RemoveToolTip, -1500
+}
+return
+
+
+Return
 
 ; GuiClose:
 ; ExitApp
