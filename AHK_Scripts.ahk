@@ -614,9 +614,14 @@ Return
 Return
 
 
-RButton & Mbutton::
+~RButton & Mbutton::
 break::
 Send {Volume_Mute} ; Br*eak key mutes
+; send, {Esc}
+return
+
+~RButton & XButton1::
+Send {Media_Play_Pause} ; Br*eak key mutes
 ; send, {Esc}
 return
 
