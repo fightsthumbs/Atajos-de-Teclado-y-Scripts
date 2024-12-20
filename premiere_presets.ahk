@@ -1,379 +1,278 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-;SetWorkingDir D:\AHK_Support_Files\  ; Ensures a consistent starting directory.
-
-/*
-;;;;;;;;TAGS;;;;;;;
-T : Transition
-S : Scale
-P : Position
-R  : Rotation
-OP : Opacity
-LMTR : Lumetri
-WS : Warp Stabilizer
-CROP : 
-TXT : 
-ZOOM : 
-FILTER : 
-GB : Gaussian Blur
-
-
-
-
-*/
-
-
-
-
-presetSelector:
-    IniRead,presets, AHK_PR_Presets.ini, PRESET_LIST, list
-    ; presets := "180 hue |AU PITCH SHIFTER |AU Vocal Enhacer |Crop 50 LEFT |Crop 50 RIGHT |CROP B50 |CROP T50 |FADE IN 4f |FLIP H |INVERT preset |LUMA KEY preset |M 100 to 120 zoom |M 50 scale |o multiply |O normal |Pitch Shifter A OPENED |Pitch Shifter DOWN |Pitch Shifter UP |Pitch Shifter UP FULL |RESET ALL |TXT Animation text |CCKampus_ZOOM 10pc |CCKampus_ZOOM15pc |CCKampus_ZoomIN&OUT 15 |CCKampus_ZoomIN15pc |GB 50 |T RedSlide LefttoRight | |S 65 |T Redslide CentertoSide |S 4k Material |WARP PRESET 2 |ZOOM 15 POSxRight |ZOOM IN 115 |ZOOM In_15"
-
-
-Gui, Destroy
-Gui, Color, 9999FF
-Gui, Font, s8, Verdana
-Gui, Add, GroupBox, x12 y29 w390 h120 , GroupBox
-Gui, Add, Button, x32 y49 w50 h40 gPreset1, Preset 01
-Gui, Add, Button, x92 y49 w50 h40 gPreset2, Preset 02
-Gui, Add, Button, x152 y49 w50 h40 gPreset3, Preset 03
-Gui, Add, Button, x212 y49 w50 h40 gPreset4, Preset 04
-Gui, Add, Button, x272 y49 w50 h40 gPreset5, Preset 05
-Gui, Add, Button, x332 y49 w50 h40 gPreset6, Preset 06
-Gui, Add, Button, x32 y99 w50 h40 gPreset7, Preset 07
-Gui, Add, Button, x92 y99 w50 h40 gPreset8, Preset 08
-Gui, Add, Button, x152 y99 w50 h40 gPreset9, Preset 09
-Gui, Add, Button, x212 y99 w50 h40 gPreset10, Preset 10
-Gui, Add, Button, x272 y99 w50 h40 gPreset1, Preset 11
-Gui, Add, Button, x332 y99 w50 h40 gPreset1, Preset 12
-Gui, Add, ListBox, x32 y162 w349 h121 vSelectedPreset, %presets%
-; Generated using SmartGUI Creator 4.0
-Gui, Show, x294 y267 h304 w428, New GUI Window
-Return
-
-submitPreset:
-Gui, Submit, NoHide
-return
-
-GuiEscape:
-GuiClose:
-Gui, Destroy
-return
-
-
+﻿#NoEnv
+SendMode Input
+;SetWorkingDir %A_ScriptDir%
+;SetWorkingDir G:\AHK_Support_Files\
 
 #IfWinActive ahk_exe Adobe Premiere Pro.exe
 
-preset(x) {
 
-    if GetKeyState("LAlt", "P")
-        changePresetName(x)
-    else  
-        addPreset(x)
-    return
-}
 
-sendPresetName(x) {
-    IniRead,presetName, AHK_PR_Presets.ini, PRESETS, %x%Preset
-    sendInput % presetName
-    return
-}
-
-changePresetName(x) {
-    InputBox, presetName
-    if presetName =
-    MsgBox, No preset Selected.
+; Hotkey handler for applying presets (|)
+$Launch_App2::
+SendInput, '
+Input, key, L1 T5, {Escape}{Enter}, abcdefghijklmnopqrstuvwxyz0123456789
+    ;MsgBox, DEGUB %key% %iniFilePr% %presetSection% 
+    if %key%
+        SavePreset(key)
     else
-     IniWrite, %presetName%, AHK_PR_Presets.ini, PRESETS, %x%Preset
+        ; SendInput, |
+return
+
+$Launch_Mail::
+Input, key, L1 T4, {Enter}, abcdefghijklmnopqrstuvwxyz0123456789
+if %key% {
+    ApplyPreset(key)
+} else {
     return
 }
 
-
-
-
-$|::send, {|}
-return
-
-$'::send, {'}
-return
-
-
-
-' & 1::
-| & 1::
-preset("first")
-return
-
-' & 2::
-| & 2::
-preset("second")
-return
-
-' & 3::
-| & 3::
-preset("third")
-return
-
-' & 4::
-| & 4::
-preset("fourth")
-return
-
-' & 5::
-| & 5::
-preset("fifth")
-return
-
-' & 6::
-| & 6::
-preset("sixth")
-return
-
-' & 7::
-| & 7::
-preset("seventh")
-return
-
-' & 8::
-| & 8::
-preset("eighth")
-return
-
-
-' & 9::
-| & 9::
-preset("ninth")
-return
-
-
-| & 0::
-' & 0::
-preset("tenth")
-return
-
-| & q::
-Gosub presetSelector
 return
 
 
 
 
-Preset1:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, firstPreset
-}
-;msgbox, se ha seleccionado el preset numero 1
-return
-
-Preset2:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, secondPreset
-}
-; msgbox, se ha seleccionado el preset numero 2
-return
-
-Preset3:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, thirdPreset
-}
-; msgbox, se ha seleccionado el preset numero 3
-return
-
-Preset4:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, fourthPreset
-}
-; msgbox, se ha seleccionado el preset numero 4
-return
-
-Preset5:
-; msgbox, se ha seleccionado el preset numero 5
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, fifthPreset
-}
-return
-
-Preset6:
-;msgbox, se ha seleccionado el preset numero 6
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, sixthPreset
-}
-return
-
-
-Preset7:
-;msgbox, se ha seleccionado el preset numero 7
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, seventhPreset
-}
-return
-
-Preset8:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, eighthPreset
-}
-;msgbox, se ha seleccionado el preset numero 8
-return
-
-Preset9:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, ninthPreset
-}
-;msgbox, se ha seleccionado el preset numero 9
-return
-
-Preset10:
-Gui, Submit, NoHide
-if (SelectedPreset = "")
-{
-msgbox, no se seleccionó ningun elemento
-    return
-} else {
-IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, tenthPreset
-}
-;msgbox, se ha seleccionado el preset numero 10
-return
-
-Preset11:
-msgbox, se ha seleccionado el preset numero 11
-return
-
-Preset12:
-msgbox, se ha seleccionado el preset numero 12
-return
-
-
-
-
-
-
-changePresetName2(x) {
-;Gosub, submitPreset
-if (SelectedPreset = "") {
-    msgbox, no se seleccionó ningun elemento
-} else {
-    IniWrite, %SelectedPreset%, AHK_PR_Presets.ini, PRESETS, %x%Preset
-}
-}
-return
-
-
-
-
-
-
-
-
-
-
-addPreset(presetName) {
-coordmode, pixel, screen
-coordmode, mouse, screen
-coordmode, Caret, screen
-
-BlockInput, SendAndMouse
-BlockInput, MouseMove
-BlockInput, On
-
-MouseGetPos, xposP, yposP
+; Function to handle saving presets
+SavePreset(key) {
+    global iniFilePr
+    global presetSection
+; Esperar a que el usuario haga doble clic
 
 MouseClick, middle
-;sendInput, {mButton} ;this will MIDDLE CLICK to bring focus to the panel underneath the cursor (which must be the timeline). I forget exactly why, but if you create a nest, and immediately try to apply a preset to it, it doesn't work, because the timeline wasn't in focus...? Or something. IDK.
-sleep 5
+Sleep, 5
+SendInput, ^{F6}
+Sleep, 10
+SendInput, +f
+Sleep, 10
+MouseMove, %A_CaretX%, %A_CaretY%, 0
+Sleep, 15
+SendInput, Presets{Enter}
+Sleep, 20
+SendInput, ñ
 
-sendInput, ^{F6}
-sleep 10
-sendInput, +f
-sleep 10
-sendInput, ^a
-sleep 10
-sendInput, ^x
-sleep 10
-MouseMove, %A_CaretX%, %A_CaretY%, 0 ;this moves the cursor, instantly, to the position of the caret.
-sleep 5
-;ControlGetPos, XX, YY, Width, Height, %classNN%, ahk_class %class%, SubWindow, SubWindow 
-;MouseMove, XX-50, YY+13, 0 
-;send, %presetName%
-sendPresetName(presetName)
-MouseMove, 13, 50, 0, R
-/*
-MouseGetPos, iconX, iconY, Window, classNN ;---now we have to figure out the ahk_class of the current panel we are on. It might be "DroverLord - Window Class14", but the number changes anytime you move panels around... so i must always obtain the information anew.
-sleep 5
-WinGetClass, class, ahk_id %Window% ;----------"ahk_id %Window%" is important for SOME REASON. if you delete it, this doesn't work.
-;tooltip, ahk_class =   %class% `nClassNN =     %classNN% `nTitle= %Window%
-;sleep 50
-ControlGetPos, xxx, yyy, www, hhh, %classNN%, ahk_class %class%, SubWindow, SubWindow ;;-I tried to exclude subwindows but I don't think it works...?
-MouseMove, www/4, hhh/2, 0, R ;-----------------moves to roughly the CENTER of the Effects panel. Clicking here will clear the displayed presets from any duplication errors. VERY important. Without this, the script fails 20% of the time. This is also where the script can go wrong, by trying to do this on the timeline, meaning it didn't get the Effects panel window information as it should have.
-sleep 5
-MouseClick, left, , , 1 ;-----------------------the actual click
-sleep 5
-MouseMove, iconX, iconY, 0 ;--------------------moves cursor BACK onto the preset's icon
-;tooltip, should be back on the preset's icon
-sleep 5
-;;+++++If this bug is ever resolved, then the lines ABOVE are no longer necessary.++++++
-*/
-sleep 10
+MouseGetPos, tooltipX, tooltipY
+ToolTip, Double-click on the preset you want to save for key: %key%, %tooltipX%, %tooltipY%
+;MsgBox, Double-click on the preset you want to save for key: %key%
 
-MouseClickDrag, Left, , , %xposP%, %yposP%, 0 ;---clicks the left button down, drags this effect to the cursor's pervious coordinates and releases the left mouse button, which should be above a clip, on the TIMELINE panel.
-sleep 5
+; Esperar al doble clic y copiar el texto seleccionado
+KeyWait, LButton, D
+KeyWait, LButton
+KeyWait, LButton, D T0.2
+if !ErrorLevel
+{
+    ; Después del doble clic, copiar el texto seleccionado
+    Sleep, 50  ; Pequeña pausa para asegurar que el texto esté seleccionado
+    SendInput, ^c
+    Sleep, 50  ; Pequeña pausa para asegurar que el texto se haya copiado
+    send, {Escape}
+    
+    ; Obtener el texto del portapapeles
+    presetName := Clipboard
 
-sendInput, ^{F5}
-MouseClick, middle
+    ToolTip
+
+    if (presetName != "") {
+        ; Guardar el preset en el archivo ini
+        IniWrite, %presetName%, %iniFilePr%, %presetSection%, %key%_key_preset
+        ToolTip, Preset "%presetName%" saved for key: %key%, %tooltipX%, %tooltipY%
+        SetTimer, RemoveToolTip, -1000  ; El tooltip desaparecerá después de 1 segundo
+    }
+    else {
+        ToolTip, No text was selected. Please try again., %tooltipX%, %tooltipY%
+        SetTimer, RemoveToolTip, -1000
+    }
+
+    SendInput, ^{F5}
+    MouseClick, middle
+
+}
+else {
+    MsgBox, Double-click timeout. Please try again.
+}
+}
+
+; Function to apply presets
+ApplyPreset(key) {
+
+    global iniFilePr
+    global presetSection
+    ; MsgBox, FunciónApplyPreset DEBUG - iniFilePr: %iniFilePr% presetSection: %presetSection%
+    IniRead, presetName, %iniFilePr%, %presetSection%, %key%_key_preset
+    ; MsgBox, %presetName%
+    if (presetName = "ERROR" || presetName = "") {
+        MsgBox, No preset found for key: %key%
+        return
+    }
+    
+        
+    ; Store current mouse position
+
+    BloquearInput() 
+    
+    ; Apply preset sequence
+    MouseClick, middle
+    Sleep, 5
+    SendInput, ^{F6}
+    Sleep, 10
+    SendInput, +f
+    Sleep, 10
+    SendInput, ^a
+    Sleep, 10
+    SendInput, ^x
+    Sleep, 10
+    
+    ; Move to caret position and send preset name
+    MouseMove, %A_CaretX%, %A_CaretY%, 0
+    Sleep, 5
+    SendInput, %presetName%
+    MouseMove, 13, 50, 0, R
+    Sleep, 10
+    
+    ; Drag preset to original position
+    MouseClickDrag, Left, , , %xposP%, %yposP%, 0
+    Sleep, 5
+    
+    ; Reset view
+    SendInput, ^{F5}
+    MouseClick, middle
+
+    DesbloquearInput()
+}
+    
 
 
-blockinput, MouseMoveOff ;returning mouse movement ability
-BlockInput, off 
+BloquearInput() {
+    MouseGetPos, xposP, yposP
+    coordmode, pixel, screen
+    coordmode, mouse, screen
+    coordmode, Caret, screen
+    ; Block input during preset application
+    BlockInput, SendAndMouse
+    BlockInput, MouseMove
+    BlockInput, On
+    
+    Return
+}
+
+DesbloquearInput() {
+
+    MouseMove, %xposP%, %yposP%
+    ; Re-enable input
+    BlockInput, MouseMoveOff
+    BlockInput, off
+    return
+}
+
+
+;;Agregar Capa de Ajuste 
+Browser_Refresh::
+media_add("Still Image Adjustment Layer")
+return
+
+Launch_App1::
+media_add("Movie Bars and Tone - Rec 709")
+return
+
+media_add(x) {
+    BloquearInput()
+    MouseClick, M
+    SendInput, ^{F1}
+    Sleep, 20
+    SendInput, ^!+1
+    Sleep, 50
+    SendInput, +f 
+    Sleep, 200
+    MouseMove, %A_CaretX%, %A_CaretY%
+    Sleep, 50
+    SendInput, %x%
+    Sleep,250
+    SendInput,{Tab}{Esc}
+    Sleep, 50
+    SendInput, .
+    Sleep, 50
+    SendInput, +f {BackSpace}
+    Sleep, 50
+    DesbloquearInput()
+    Return
+}
+    
+
+!|::
+marqueeSelect()
+sendInput {F3}
+sleep 50
+sendInput ^+x
+sleep 50
+return
+
+
+^|::
+marqueeSelect()
+return
+
+
+
+marqueeSelect() {
+ToolTip, Please marquee select an area to delete
+; if key
+; goto canceled
+click_count = 0
+
+KeyWait, LButton, D ; Wait for the left mouse button to be pressed down.
+MouseGetPos, startxpos, startypos
+KeyWait, LButton, U ; Wait for the left mouse button to be pressed down.
+MouseGetPos, endxpos, endypos
+
+If (startxpos == endxpos && startypos == endypos)
+{
+    goto canceled
+}
+else
+{
+    inXPos := endxpos > startxpos ? startxpos : endxpos
+    outXPos := endxpos > startxpos ? endxpos : startxpos
+    BloquearInput()
+    sleep 25
+
+    MouseMove, %inXPos%, %startypos%
+    sleep 20
+    sendInput ^+{x 2}
+     sleep 10
+    sendInput ^+{a 2}
+    sleep 10
+    sendInput ^+!|
+    sleep 10
+    sendInput i
+    ; sendInput c
+    sleep 25
+    ; MouseMove, %endxpos%, %endypos%
+    MouseMove, %outXPos%, %startypos%
+    sleep 20
+    sendInput ^+!|
+    sleep 10
+    sendInput o
+     sleep 10
+    sendInput ^+{a 2}
+    sleep 10
+    ;BlockInput, Off
+    DesbloquearInput()
+}
+; clipboard = %AHKCommand%
+ToolTip, exito!
+SetTimer, RemoveToolTip, -1500
+; MsgBox To simulate this click in AHK, use "%AHKCommand%" (This has been copied to your paste buffer). This script will exit after you dismiss this message.
+return
+
+canceled:
+ToolTip, Canceled!
+SetTimer, RemoveToolTip, -1500
 return
 }
+
+
+
+
+
+
 
 
 #IfWinActive
-
-
-
