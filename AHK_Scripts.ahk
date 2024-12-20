@@ -491,7 +491,7 @@ return
 
 OpenSettings:
     Gui Submit, NoHide
-    RunWait, AHK_history.csv
+    RunWait, AHK_settings.ini
     Gui, Destroy
 return
 
