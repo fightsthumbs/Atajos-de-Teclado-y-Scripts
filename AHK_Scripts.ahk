@@ -96,7 +96,7 @@ return
      */  
 
 
-SetWorkingDir G:\AHK_Support_Files\
+;SetWorkingDir G:\AHK_Support_Files\
 
 
 
@@ -1232,92 +1232,6 @@ Return
 
 
 
-^|::
-ToolTip, Please marquee select an area to delete
-
-; if key
-; goto canceled
-
-click_count = 0
-
-KeyWait, LButton, D ; Wait for the left mouse button to be pressed down.
-MouseGetPos, startxpos, startypos
-KeyWait, LButton, U ; Wait for the left mouse button to be pressed down.
-MouseGetPos, endxpos, endypos
-
-
-
-If (startxpos == endxpos && startypos == endypos)
-
-{
-    goto canceled
-
-}
-
-else
-
-{
-    inXPos := endxpos > startxpos ? startxpos : endxpos
-    outXPos := endxpos > startxpos ? endxpos : startxpos
-    BlockInput, On
- sleep 25
-;    /*  MouseMove, %startxpos%, %startypos%
-;     sleep 20
-;     sendInput ^+!|
-;     sleep 20
-;     sendInput dc
-;     ; sendInput c
-;     sleep 20
-;     MouseMove, %endxpos%, %endypos%
-;     sleep 50
-;     sendInput ^+!|
-;     sleep 20
-;     sendInput dq
-;     ; sendInput q
-;     send {F3} 
-
-    
-    ; MouseMove, %startxpos%, %startypos%
-    MouseMove, %inXPos%, %startypos%
-    sleep 20
-    sendInput ^+{x 2}
-     sleep 10
-    sendInput ^+{a 2}
-    sleep 10
-    sendInput ^+!|
-    sleep 10
-    sendInput i
-    ; sendInput c
-    sleep 25
-    ; MouseMove, %endxpos%, %endypos%
-    MouseMove, %outXPos%, %startypos%
-    sleep 20
-    sendInput ^+!|
-    sleep 10
-    sendInput o
-     sleep 10
-    sendInput ^+{a 2}
-    sleep 10
-    sendInput {F3}
-    sleep 10
-    sendInput ^+x
-     sleep 10
-   
-
-    BlockInput, Off
-}
-
-
-; clipboard = %AHKCommand%
-ToolTip, exito!
-SetTimer, RemoveToolTip, -1500
-; MsgBox To simulate this click in AHK, use "%AHKCommand%" (This has been copied to your paste buffer). This script will exit after you dismiss this message.
-return
-
-canceled:
-ToolTip, Canceled!
-SetTimer, RemoveToolTip, -1500
-return
 
 
 ^!+F1::

@@ -23,6 +23,7 @@ spotifyKey(key) {
 }
 
 ; Win+alt+p: Play/Pause
+AppsKey & Media_Play_Pause::
 #!p::
 {
 	spotifyKey("{Space}")
@@ -58,14 +59,14 @@ spotifyKey(key) {
 }
 
 ; shift+volumeUp: Volume up
-+Volume_Up::
+#!PgUp::
 {
 	spotifyKey("^{Up}")
 	Return
 }
 
 ; shift+volumeDown: Volume down
-+Volume_Down::
+#!PgDn::
 {
 	spotifyKey("^{Down}")
 	Return

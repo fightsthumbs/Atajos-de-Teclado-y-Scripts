@@ -6,3 +6,10 @@ ITA_URL := {treccani: "https://www.treccani.it/enciclopedia/ricerca/", corriere:
 BROWSERS_EXE := {firefox: "firefox.exe", brave: "brave.exe", opera: "opera.exe", edge: "msedge", chrome: "chrome.exe"}
 BROWSERS_CLASS := {firefox: "ahk_class MozillaWindowClass", brave: "ahk_exe brave.exe", opera: "ahk_exe opera.exe", edge: "ahk_exe msedge.exe", chrome: "ahk_exe chrome.exe"}
 
+
+iniFilePr := "AHK_PR_Presets.ini"
+presetSection := "PRESETS"
+nombreCualquiera := "este es un nombre cualquiera"
+
+global xposP := 0
+global yposP := 0
