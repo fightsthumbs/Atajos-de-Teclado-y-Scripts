@@ -50,57 +50,57 @@ SavePreset(key) {
     global presetSection
 ; Esperar a que el usuario haga doble clic
 
-MouseClick, middle
-Sleep, 5
-SendInput, ^{F6}
-Sleep, 10
-SendInput, +f
-Sleep, 10
-MouseMove, %A_CaretX%, %A_CaretY%, 0
-Sleep, 15
-SendInput, Presets{Enter}
-Sleep, 20
-SendInput, ñ
+    MouseClick, middle
+    Sleep, 5
+    SendInput, ^{F6}
+    Sleep, 10
+    SendInput, +f
+    Sleep, 10
+    MouseMove, %A_CaretX%, %A_CaretY%, 0
+    Sleep, 15
+    SendInput, Presets{Enter}
+    Sleep, 20
+    SendInput, ñ
 
-MouseGetPos, tooltipX, tooltipY
-ToolTip, Double-click on the preset you want to save for key: %key%, %tooltipX%, %tooltipY%
-;MsgBox, Double-click on the preset you want to save for key: %key%
+    MouseGetPos, tooltipX, tooltipY
+    ToolTip, Double-click on the preset you want to save for key: %key%, %tooltipX%, %tooltipY%
+    ;MsgBox, Double-click on the preset you want to save for key: %key%
 
-; Esperar al doble clic y copiar el texto seleccionado
-KeyWait, LButton, D
-KeyWait, LButton
-KeyWait, LButton, D T0.2
-if !ErrorLevel
-{
-    ; Después del doble clic, copiar el texto seleccionado
-    Sleep, 50  ; Pequeña pausa para asegurar que el texto esté seleccionado
-    SendInput, ^c
-    Sleep, 50  ; Pequeña pausa para asegurar que el texto se haya copiado
-    send, {Escape}
-    
-    ; Obtener el texto del portapapeles
-    presetName := Clipboard
+    ; Esperar al doble clic y copiar el texto seleccionado
+    KeyWait, LButton, D
+    KeyWait, LButton
+    KeyWait, LButton, D T0.2
+    if !ErrorLevel
+    {
+        ; Después del doble clic, copiar el texto seleccionado
+        Sleep, 50  ; Pequeña pausa para asegurar que el texto esté seleccionado
+        SendInput, ^c
+        Sleep, 50  ; Pequeña pausa para asegurar que el texto se haya copiado
+        send, {Escape}
+        
+        ; Obtener el texto del portapapeles
+        presetName := Clipboard
 
-    ToolTip
+        ToolTip
 
-    if (presetName != "") {
-        ; Guardar el preset en el archivo ini
-        IniWrite, %presetName%, %iniFilePr%, %presetSection%, %key%_key_preset
-        ToolTip, Preset "%presetName%" saved for key: %key%, %tooltipX%, %tooltipY%
-        SetTimer, RemoveToolTip, -1000  ; El tooltip desaparecerá después de 1 segundo
+        if (presetName != "") {
+            ; Guardar el preset en el archivo ini
+            IniWrite, %presetName%, %iniFilePr%, %presetSection%, %key%_key_preset
+            ToolTip, Preset "%presetName%" saved for key: %key%, %tooltipX%, %tooltipY%
+            SetTimer, RemoveToolTip, -1000  ; El tooltip desaparecerá después de 1 segundo
+        }
+        else {
+            ToolTip, No text was selected. Please try again., %tooltipX%, %tooltipY%
+            SetTimer, RemoveToolTip, -1000
+        }
+
+        SendInput, ^{F5}
+        MouseClick, middle
+
     }
     else {
-        ToolTip, No text was selected. Please try again., %tooltipX%, %tooltipY%
-        SetTimer, RemoveToolTip, -1000
+        MsgBox, Double-click timeout. Please try again.
     }
-
-    SendInput, ^{F5}
-    MouseClick, middle
-
-}
-else {
-    MsgBox, Double-click timeout. Please try again.
-}
 }
 
 ; Function to apply presets
@@ -132,7 +132,38 @@ ApplyPreset(key) {
     Sleep, 10
     SendInput, ^x
     Sleep, 10
-    
+
+
+    if (A_CaretX = "")
+        {
+        ;No Caret (blinking vertical line) can be found.
+        waiting2 = 0
+        ;the following loop is waiting until it sees the caret. SUPER IMPORTANT. Without this, the function doesn't work 10% of the time.
+        ;This is also way better than just always waiting 60 milliseconds like it had been before. The function can continue as soon as Premiere is ready.
+        loop
+            {
+            waiting2 ++
+            sleep 33
+            tooltip, counter = (%waiting2% * 33)`nCaret = %A_CaretX%
+            if (A_CaretX <> "")
+                {
+                tooltip, CARET WAS FOUND
+                break
+                }
+            if (waiting2 > 30)
+                {
+                tooltip, FAIL - no caret found. `nIf your cursor will not move`, hit the button to call the preset() function again.`nTo remove this tooltip`, refresh the script using its icon in the taskbar.
+                ;Note to self, need much better way to debug this than screwing the user
+                sleep 200
+                ;tooltip,
+                return
+                ;lol, are you triggered by this GOTO? lolol lololol
+                }
+            }
+        sleep 1
+        tooltip,
+        }
+
     ; Move to caret position and send preset name
     MouseMove, %A_CaretX%, %A_CaretY%, 0
     Sleep, 5
@@ -183,6 +214,37 @@ v & Space:: ;;minimizar tracks de video y volver v1 al primer track
 send, ^!+{Home}
 return
 
+;video sources — Move up and down
+v & Up::
+v & WheelUp::
+send, ^!+{Up}
+sleep, 10
+Return
+
+v & Down::
+v & WheelDown::
+send,^!+{Down}
+sleep, 10
+Return
+
+a::
+send, a
+Return
+
+;audiosources — Move up and down
+a & Up::
+a & WheelUp::
+send, ^!+{PgDn}
+sleep, 10
+Return
+
+a & Down::
+a & WheelDown::
+send, ^!+{PgUp}
+sleep, 10
+Return
+
+
 z::
 send, z
 Return
@@ -191,6 +253,33 @@ z & space:: ;;zoom en playhead
 send, {NumpadDot}
 Return
 
+
+k::
+send, k
+Return
+
+k & ,:: ;;keyframe ease in
+Send, ^!+{vkBF}
+Return
+
+k & .::
+Send, ^!+{vkDE} ;;kreyframe ease out
+Return
+
+k & h::
+Send, ^!+´ ;;keyframe hold
+return
+
+
+~| & a:: ;;add Adjustment with trasform}
+sendInput ^!+x
+sleep 50
+SendInput, ^!+{Up 8}
+sleep, 10
+media_add("Still Image Adjustment Layer")
+sleep, 20
+ApplyPreset("t")
+Return
 
 ;;Agregar Capa de Ajuste 
 ~| & F1::
@@ -214,9 +303,13 @@ Return
 ;;agregar bars and tones en la selección
 ~| & F4::
 marqueeSelect()
-sleep,0
+sleep,10
 media_add("Movie Bars and Tone - Rec 709")
 Return
+
+
+
+
 
 ;función agregar media
 media_add(x) {
@@ -264,7 +357,6 @@ ToolTip, Please marquee select an area to delete
 ; if key
 ; goto canceled
 click_count = 0
-
 
 Loop {
     ; Si se presiona la tecla Esc, cancelar la selección
@@ -331,17 +423,6 @@ SetTimer, RemoveToolTip, -1500
 return
 }
 
-
-;F3 para borrar el clip debajo del playhead
-/* F3::
-Send, d
-Send, +{Delete}
-return
- */
- 
-;Borrar clip solo
-;XButton1::
-
 ^Mbutton:: ;eliminar solo fragmento o eliminar corte de un clip
 MouseClick, Middle
 MouseClick, Middle
@@ -359,19 +440,6 @@ return
 Send, ^+e
 send, {enter}
 return
-
-/* 
-;In and Out for Work Area
-<^>!i::
-send,^+!9 ;asignar ctrl alt shift 9 en premiere
-return
-
-
-<^>!o::
-send,^+!0 ;asignar ctrl alt shift 0 en premiere
-return
- */
-
 
 ;move playhead at cursor CTRL ALT SHIFT Right Click in Premiere
 +RButton::
@@ -406,10 +474,6 @@ return
     }
 return
 
-; +XButton1::
-;     reproducirTimeline("l","2")  
-; return
-
 *XButton2::
     if !GetKeyState("Shift") {
         reproducirTimeline("j")
@@ -422,7 +486,7 @@ return
 return
 
 
-!RButton::
+!RButton:: ;desplazar el playhead utilizando alt
 MouseClick, Middle
 if GetKeyState("LAlt", "P") = 1
 		{
@@ -449,28 +513,12 @@ MouseClick, middle
 Return
 
 
-
-
-
-
-
-^!+F1::
+^!+F1:: ;; eliminar silencia;;deprecated
 send,^!{F6}
 send, ^k
 send,^!{F6 3} 
 send, q
 return
-
-;#Include, D:\Documentos\AutoHotKey Scripts\Premiere Presets.ahk
-
-
-
-/* 
-Launch_Media::
-send, ^e
-return
- */
-
 
 
 ;mover mouse
@@ -480,7 +528,7 @@ MouseGetPos, xpos, ypos
 sleep, 5
 MsgBox, "The cursor is at X%xpos% Y%ypos%."
 return 
-*/
+ */
 
 /* 
 preset(x)
