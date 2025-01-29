@@ -30,6 +30,10 @@ Input, key, L1 T5, {Escape}{Enter}, abcdefghijklmnopqrstuvwxyz0123456789,.-
     }
 return
 
+^!#ScrollLock::
+RunWait, "code" . " " . %A_ScriptFullPath% . "/.."
+Return
+
 $Launch_Mail::
 tooltipAtMouse("Añadir preset")
 Input, key, L1 T4, {Enter}{Escape}, abcdefghijklmnopqrstuvwxyz0123456789,.-
@@ -155,7 +159,7 @@ ApplyPreset(key) {
                 tooltip, FAIL - no caret found. `nIf your cursor will not move`, hit the button to call the preset() function again.`nTo remove this tooltip`, refresh the script using its icon in the taskbar.
                 ;Note to self, need much better way to debug this than screwing the user
                 sleep 200
-                ;tooltip,
+                ;tooltip,~
                 return
                 ;lol, are you triggered by this GOTO? lolol lololol
                 }
@@ -168,6 +172,7 @@ ApplyPreset(key) {
     MouseMove, %A_CaretX%, %A_CaretY%, 0
     Sleep, 5
     SendInput, %presetName%
+    Sleep, 10
     MouseMove, 13, 50, 0, R
     Sleep, 10
     
@@ -206,67 +211,67 @@ DesbloquearInput() {
     return
 }
 
-v::
-send, v
-Return
+; v::
+; SendInput, v
+; Return
 
-v & Space:: ;;minimizar tracks de video y volver v1 al primer track
-send, ^!+{Home}
+~v & Space:: ;;minimizar tracks de video y volver v1 al primer track
+send, ^!+{Home} ;;podría cambiarse por shift + -
 return
 
 ;video sources — Move up and down
-v & Up::
-v & WheelUp::
+~v & Up::
+~v & WheelUp::
 send, ^!+{Up}
 sleep, 10
 Return
 
-v & Down::
-v & WheelDown::
+~v & Down::
+~v & WheelDown::
 send,^!+{Down}
 sleep, 10
 Return
 
-a::
-send, a
-Return
+; a::
+; send, a
+; Return
 
-;audiosources — Move up and down
-a & Up::
-a & WheelUp::
+;audiosources — Move and down
+~a & Up::
+~a & WheelUp::
 send, ^!+{PgDn}
 sleep, 10
 Return
 
-a & Down::
-a & WheelDown::
+~a & Down::
+~a & WheelDown::
 send, ^!+{PgUp}
 sleep, 10
 Return
 
 
-z::
-send, z
-Return
+; z::
+; sendInput, z
+; Return
 
-z & space:: ;;zoom en playhead
+~z & space:: ;;zoom en playhead
 send, {NumpadDot}
 Return
 
 
-k::
-send, k
-Return
+; k::
+; send, k
+; Return
 
-k & ,:: ;;keyframe ease in
+~k & ,:: ;;keyframe ease in
 Send, ^!+{vkBF}
 Return
 
-k & .::
+~k & .::
 Send, ^!+{vkDE} ;;kreyframe ease out
 Return
 
-k & h::
+~k & h::
 Send, ^!+´ ;;keyframe hold
 return
 
@@ -317,15 +322,17 @@ media_add(x) {
     MouseClick, M
     SendInput, ^{F1}
     Sleep, 20
-    SendInput, ^!+1
+    SendInput, ^!+1 ;es importante configurar el atajo ctrl + alt + shift + 1 para el View Preset "Untitled Project View Preset", Save As New View Preset y que la columna "Online" esté configurado de forma descendente.
     Sleep, 50
     SendInput, +f 
     Sleep, 200
     MouseMove, %A_CaretX%, %A_CaretY%
     Sleep, 50
     SendInput, %x%
-    Sleep,250
-    SendInput,{Tab}{Esc}
+    Sleep,300
+    SendInput,{Tab}
+    Sleep, 20
+    sendInput, {Esc}
     Sleep, 50
     SendInput, .
     Sleep, 50
@@ -376,7 +383,7 @@ Loop {
 
 KeyWait, LButton, U ; Wait for the left mouse button to be pressed down.
 MouseGetPos, endxpos, endypos
-
+Sleep, 20
 If (startxpos == endxpos && startypos == endypos)
 {
     goto canceled
@@ -389,7 +396,7 @@ else
     sleep 25
 
     MouseMove, %inXPos%, %startypos%
-    sleep 20
+    sleep 10
     sendInput ^+{x 2}
      sleep 10
     sendInput ^+{a 2}
@@ -401,7 +408,7 @@ else
     sleep 25
     ; MouseMove, %endxpos%, %endypos%
     MouseMove, %outXPos%, %startypos%
-    sleep 20
+    sleep 10
     sendInput ^+!|
     sleep 10
     sendInput o
