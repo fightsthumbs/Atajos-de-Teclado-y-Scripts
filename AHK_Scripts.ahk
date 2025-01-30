@@ -750,7 +750,15 @@ return
 
 
 AppsKey & PrintScreen::
-InputBox, esperantoVorto, Esperanto Vortaro, Entajpu vorton en Esperanto por serĉi la difinon,,,,,,, 40, Saluton
+if GetKeyState("Control", "P") {
+    sleep, 50
+    send, ^c
+    sleep, 50
+    esperantoVorto = %Clipboard%
+}
+else {
+    InputBox, esperantoVorto, Esperanto Vortaro, Entajpu vorton en Esperanto por serĉi la difinon,,,,,,, 40, Saluton
+}
     if ErrorLevel 
         return
     else
@@ -767,20 +775,29 @@ InputBox, esperantoVorto, Esperanto Vortaro, Entajpu vorton en Esperanto por ser
 return
 
 AppsKey & i::
-InputBox, parolaItaliana, Dizionario Italiano, Scrivi una parola in italiano,,,,,,, 40, dosso
-    if ErrorLevel 
-        return
-    else
-        func_myHistory(parolaItaliana, "italiano")
-        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, itaWith
-        Sleep 50
-        Loop, parse, optionsArray, |
-        {
-            searchWith := ITA_URL[A_LoopField]
-            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-            searchTerm := searchWith parolaItaliana
-            RunWait, %defaultBrowser% `"%searchTerm%`"
-        }
+if GetKeyState("Control", "P") {
+    sleep, 15
+    send, ^c
+    sleep, 50
+    parolaItaliana = %Clipboard%
+    ; MsgBox, %parolaItaliana%
+} ; indica que alguna de las dos condiciones debe ser verdadera, pero solo una.
+else {
+    InputBox, parolaItaliana, Dizionario Italiano, Scrivi una parola in italiano,,,,,,, 40, ;dosso
+}  
+if ErrorLevel 
+    return
+else
+    func_myHistory(parolaItaliana, "italiano")
+    IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, itaWith
+    Sleep 50
+    Loop, parse, optionsArray, |
+    {
+        searchWith := ITA_URL[A_LoopField]
+        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
+        searchTerm := searchWith parolaItaliana
+        RunWait, %defaultBrowser% `"%searchTerm%`"
+    }
 return
 
 
@@ -793,6 +810,12 @@ return
 #KeyHistory 120
 AppsKey & ScrollLock::
 KeyHistory
+return
+
+AppsKey & Pause::
+MsgBox, Lets go to slepp
+Sleep, 20
+DllCall("PowrProf\SetSuspendState", "Int", 0, "Int", 0, "Int", 0)
 return
 
 AppsKey & 0::
@@ -813,8 +836,13 @@ Return
 AppsKey & l::
 return
 
-AppsKey & Tab::
 AppsKey & Home::
+flashOpen2("ahk_exe Obsidian.exe", "C:\Users\fight\AppData\Local\Programs\Obsidian\Obsidian.exe", "obsidian")
+Return
+
+
+AppsKey & Tab::
+
 ; AppsKey & ñ::
 createFolderStructure()
 return
@@ -881,6 +909,7 @@ AppsKey & Numpad4::
 flashOpen("ahk_exe IDMan.exe", "C:\Program Files (x86)\Internet Download Manager\IDMan.exe")
 return
 
+#|::
 AppsKey & Numpad7::
 flashOpen("ahk_class Notepad", "notepad.exe")
 return
