@@ -3,14 +3,6 @@
 
 #IfWinActive ahk_exe SumatraPDF.exe
 
-NotesFolder := "C:\NotasLibros"  ; Cambia esta ruta por donde quieras guardar las notas
-FileExtension := ".md"
-
-; Crear carpeta de notas si no existe
-FileCreateDir, %NotesFolder%
-
-
-
 CopySelectedText() {
     Clipboard := ""
     Send, ^c
@@ -38,6 +30,7 @@ GetBookName() {
     
     ; Remover caracteres no válidos para nombres de archivo
     BookName := RegExReplace(BookName, "[<>:""/\\|?*]", "")
+    BookName := RegExReplace(BookName, " - SumatraPDF", "")
     
     ; Si el título está vacío o es muy corto, usar un nombre por defecto
     if (StrLen(BookName) < 3) {
@@ -60,6 +53,10 @@ SaveFormattedText(text, format) {
     if (text = "") {
         return
     }
+
+    NotesFolder := A_WorkingDir . "\BookNotes\"  ; Cambia esta ruta por donde quieras guardar las notas
+    FileExtension := ".md"
+    FileCreateDir, %NotesFolder%
     
     BookName := GetBookName()
     FilePath := NotesFolder . "\" . BookName . FileExtension
@@ -77,7 +74,7 @@ SaveFormattedText(text, format) {
     } else if (format = "italic") {
         FormattedText := "*" . text . "*"
     } else if (format = "underline") {
-        FormattedText := "_" . text . "_"
+        FormattedText := "<u>" . text . "</u>"
     }
     
     ; Crear entrada de nota
@@ -87,7 +84,9 @@ SaveFormattedText(text, format) {
     FileAppend, %NoteEntry%, %FilePath%, UTF-8
     
     ; Mostrar notificación
-    TrayTip, Nota Guardada, Texto guardado en: %BookName%%FileExtension%, 2, 1
+    ToolTip % "saved in " . BookName,     70, 70
+    SetTimer, RemoveToolTip, -5000
+
 }
 
 ; Teclas de función para diferentes formatos
@@ -120,18 +119,3 @@ return
 ^!n::
     Run, %NotesFolder%
 return
-
-/* 
-bookNotes := FileOpen(bookFileName, "a") 
-    ;;InputBox, var_mensaje, Title, Prompt
-                                    
-    FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss ;;ISO 8601
-
-    bookNotes.Write("`r`n" var_fechayhora " / page " bookCurrentPage "`r`n"  clipboard "`r`n")
-    bookNotes.Close()
-    ;SetWorkingDir %A_ScriptDir%
-    ToolTip % "saved in " . bookFileName,     70, 70
-    SetTimer, RemoveToolTip, -5000
-
-
-return */
