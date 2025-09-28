@@ -3,6 +3,8 @@
 
 #IfWinActive ahk_exe SumatraPDF.exe
 
+
+
 CopySelectedText() {
     Clipboard := ""
     Send, ^c
@@ -19,8 +21,6 @@ CopySelectedText() {
 
     return Clipboard
 }
-
-
 
 GetBookName() {
     WinGetActiveTitle, WindowTitle
@@ -53,8 +53,8 @@ SaveFormattedText(text, format) {
     if (text = "") {
         return
     }
-
-    NotesFolder := A_WorkingDir . "\BookNotes\"  ; Cambia esta ruta por donde quieras guardar las notas
+    NotesFolder := A_WorkingDir . "\BookNotes\"
+      ; Cambia esta ruta por donde quieras guardar las notas
     FileExtension := ".md"
     FileCreateDir, %NotesFolder%
     
@@ -88,7 +88,7 @@ SaveFormattedText(text, format) {
     SetTimer, RemoveToolTip, -5000
 
 }
-
+Variable := "Mensaje"
 ; Teclas de función para diferentes formatos
 
 ; F9 - Texto normal
@@ -117,5 +117,6 @@ return
 
 ; Hotkey adicional para abrir la carpeta de notas (Ctrl+Alt+N)
 ^!n::
+    NotesFolder := A_WorkingDir . "\BookNotes\"
     Run, %NotesFolder%
 return
