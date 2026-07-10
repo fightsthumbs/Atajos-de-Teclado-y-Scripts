@@ -5,6 +5,15 @@ SetWorkingDir G:\AHK_Support_Files\ ;%A_ScriptDir%  ; Ensures a consistent start
 
 
 
+; ============================================================================
+; VARIABLES GLOBALES
+; ============================================================================
+global SUPPORT_FILES_DIR := "G:\AHK_Support_Files"
+global SETTINGS_FILE := SUPPORT_FILES_DIR . "\AHK_settings.ini"
+global HISTORY_FILE := SUPPORT_FILES_DIR . "\AHK_history.csv"
+global PR_PRESETS_FILE := SUPPORT_FILES_DIR . "\AHK_PR_Presets.ini"
+
+
 ;;variables
 #Include, %A_LineFile%\..\variables.ahk
 
@@ -66,7 +75,9 @@ iniFilePR.Close()
 
 
 
-;;;;;;Include Section
+;============================================================================
+; INCLUDES - Módulos secundarios
+; ============================================================================
 
 #Include, %A_LineFile%\..\esperanto_keys.ahk
 #Include, %A_LineFile%\..\PasswordAssistant.ahk
@@ -78,6 +89,7 @@ iniFilePR.Close()
 #Include, %A_LineFile%\..\ShutdownTimer.ahk
 #Include, %A_LineFile%\..\pdf_paste_fix.ahk
 #Include, %A_LineFile%\..\SpotifyGlobalKeys.ahk
+#Include, %A_LineFile%\..\spotify_chords.ahk
 ;
 
 ; #Include, D:\Documentos\AutoHotKey Scripts\Alt_menu_acceleration_DISABLER.ahk
@@ -100,17 +112,16 @@ return
 
 
 
-tooltipAtMouse(message, time:=-3000)
- {
+tooltipAtMouse(message, time:=-3000) {
     CoordMode, ToolTip, Screen
     MouseGetPos, xTTMouse, yTTMouse
     ToolTip, %message%, %xTTMouse%, %yTTMouse%
     SetTimer, RemoveToolTip, %time%
- }
+}
 
 ;;subrutina para remover los tooltips
 RemoveToolTip:
-ToolTip
+    ToolTip
 return
 
 ;;funcion que permite mostrar 
@@ -121,19 +132,76 @@ showTooltip(x) {
     return 
 }
 
-;;funcion historial de búsqueda.
-func_myHistory(termino, etiqueta) {
-    ;SetWorkingDir, D:\
-    ;;Append: Creates a new file if the file didn't exist, 
-    historyFile := FileOpen("AHK_history.csv", "a") 
-    ;;InputBox, var_mensaje, Title, Prompt
-                                    
-    FormatTime, var_fechayhora,, yyyyMMdd-HH:mm:ss ;;ISO 8601
-    historyFile.Write("`r`n" var_fechayhora ";" etiqueta ";" termino)
-    historyFile.Close()
-    ;SetWorkingDir %A_ScriptDir%
-    Return
+
+; Guardar historial de búsquedas
+SaveSearchHistory(term, tag) {
+    FormatTime, timestamp, , yyyyMMdd-HH:mm:ss
+    FileAppend, %timestamp%;%tag%;%term%`r`n, %HISTORY_FILE%
 }
+
+; ============================================================================
+; BÚSQUEDAS WEB
+; ============================================================================
+
+SearchWeb(searchType := "search") {
+    InputBox, searchTerm, Search, Enter search term:,,,,,,, 40,
+    
+    if ErrorLevel
+        return
+    
+    SaveSearchHistory(searchTerm, searchType)
+    PerformSearch(searchTerm, searchType)
+}
+
+SearchFromClipboard() {
+    Send, ^c
+    ClipWait, 1
+    
+    if ErrorLevel {
+        TooltipAtMouse("Nothing to copy", 2000)
+        return
+    }
+    
+    SaveSearchHistory(Clipboard, "clipboardSearch")
+    PerformSearch(`"%clipboard%`", "search")
+}
+
+PerformSearch(term, searchType) {
+    iniKey := (searchType = "search") ? "searchWith" : searchType . "With"
+    IniRead, engines, %SETTINGS_FILE%, SEARCH_ENGINES, %iniKey%
+    
+    defaultBrowser := GetDefaultBrowser()
+    
+    Loop, Parse, engines, |
+    {
+        urlBase := GetSearchURL(A_LoopField, searchType)
+        searchURL := urlBase . term
+        Run, %defaultBrowser% `"%searchURL%`"
+        Sleep, 100
+    }
+}
+
+
+;; función que retorna una variable que contiene el ejecutable del buscador por defecto
+GetDefaultBrowser() {
+    IniRead, defaultBrowser_Key, AHK_settings.ini, SEARCH_ENGINES, searchBrowser
+    Return defaultBrowser_Key
+}
+
+GetSearchURL(engine, searchType) {
+    if (searchType = "search")
+        return SEARCH_URL[engine]
+    else if (searchType = "definition")
+        return DEFINITION_URL[engine]
+    else if (searchType = "translate")
+        return TRANSLATE_URL[engine]
+    else if (searchType = "esperanto")
+        return ESPO_URL[engine]
+    else if (searchType = "italiano")
+        return ITA_URL[engine]
+    return ""
+}
+
 
 ;;función para interar entre varias intancias de un mismo programa
 flashOpen(nombre, exe) {
@@ -250,63 +318,6 @@ presetTransValue3:
     Gui, Destroy
 return
 
-
-
-/* 
-GuiClose:
-GuiEscape:
-    ExitApp
-return
-
- */
-
-
-
-;ScriptEnd
-
-
-
-/* #IfWinActive
-Numpad5 & c::
-WinGetClass, class, A
-MsgBox, The active window's class is "%class%".
-Return
-
-/* #IfWinActive, Spotify Free
-Numpad5 & s::
-MsgBox, Este mensaje solo aparece al apretar 5 + s en spotify
-Return
-
-#IfWinActive, 
-Numpad5 & y::
-Run, https://www.youtube.com
-Return
- */
-
-
-/* Numpad5 & n::
-Run, C:\Users\XPC\AppData\Local\Programs\Notion\Notion.exe
-;Send, ^+n
-Return
-
-Numpad5 & b::
-Run, D:\Archivos de Programas\Blender\blender.exe
-Return
-
-Numpad5 & e::
-Run, D:\Archivos de Programas\Everything\Everything.exe
-Return
- */
-
-
-
-
-
-
-
-
-
-
 /*
  / \-------------------, 
  \_,|                  | 
@@ -314,23 +325,6 @@ Return
     |  ,-----------------
     \_/________________/ 
 */
-/*
-LWin  <#
-RWin   >#
-*/
-
-
-;LWin & F7::
-;showTooltip(A_ThisHotkey)
-;return
-
-; LWin & F6::
-; FileSelectFolder, OutputVar, , 3
-; if OutputVar =
-;     MsgBox, You didn't select a folder.
-; else
-;     MsgBox, You selected folder "%OutputVar%".
-; return
 
 
 
@@ -340,53 +334,19 @@ return
 
 ;;;;;;Favourite Paths;;;;;;;
 
-LWin & F1::
-favouritePaths("first")
-return
 
-LWin & F2::
-favouritePaths("second")
-return
-
-LWin & F3::
-favouritePaths("third")
-return
-
-LWin & F4::
-favouritePaths("fourth")
-return
-
-LWin & F5::
-favouritePaths("fifth")
-return
-
-LWin & F6::
-favouritePaths("sixth")
-return
-
-LWin & F7::
-favouritePaths("seventh")
-return
-
-LWin & F8::
-favouritePaths("eighth")
-return
-
-LWin & F9::
-favouritePaths("ninth")
-return
-
-LWin & F10::
-favouritePaths("tenth")
-return
-
-LWin & F11::
-favouritePaths("eleventh")
-return
-
-LWin & F12::
-favouritePaths("twelfth")
-return
+LWin & F1::FavouritePaths("first")
+LWin & F2::FavouritePaths("second")
+LWin & F3::FavouritePaths("third")
+LWin & F4::FavouritePaths("fourth")
+LWin & F5::FavouritePaths("fifth")
+LWin & F6::FavouritePaths("sixth")
+LWin & F7::FavouritePaths("seventh")
+LWin & F8::FavouritePaths("eighth")
+LWin & F9::FavouritePaths("ninth")
+LWin & F10::FavouritePaths("tenth")
+LWin & F11::FavouritePaths("eleventh")
+LWin & F12::FavouritePaths("twelfth")
 
 ;;;;;;Favourite Paths END;;;;;;;
 
@@ -572,13 +532,13 @@ Gosub, run_everything
 Run, "C:\Program Files\Bulk Rename Utility\Bulk Rename Utility.exe"
 return
 
-;Buscar en Ecosia el texto seleccionado
+;Buscar el texto seleccionado
 ^+F5::
 {
 
  Send, ^c
  Sleep 50
- func_myHistory(clipboard, "searchFromClipboard")
+ SaveSearchHistory(clipboard, "searchFromClipboard")
  IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
  Loop, parse, optionsArray, |
 	{
@@ -695,110 +655,11 @@ return
 
 
 
-AppsKey & F10::
-InputBox, termino, Busqueda de Google, Escribe lo que quieras buscar,,,,,,, 40,
-    if ErrorLevel 
-        return
-    else
-        func_myHistory(termino, "search")
-        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, searchWith
-        Sleep 50
-        Loop, parse, optionsArray, |
-        {
-            searchWith := SEARCH_URL[A_LoopField]
-            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-            searchTerm := searchWith termino
-            RunWait, %defaultBrowser% `"%searchTerm%`"
-        }
-        ;;RunWait % SearchTool.br termino
-            ;;RunWait % SearchTool.e termino
-return
-
-AppsKey & F11::
-InputBox, buscarDefinicion, Palabra, Escribe una palabra para buscar su significado,,,,,,, 40, paralelepípedo
-    if ErrorLevel 
-        return
-    else
-        func_myHistory(buscarDefinicion, "definition")
-        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, definitionWith
-        Sleep 50
-        Loop, parse, optionsArray, |
-        {
-            searchWith := DEFINITION_URL[A_LoopField]
-            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-            searchTerm := searchWith buscarDefinicion
-            RunWait, %defaultBrowser% `"%searchTerm%`"
-        }
-return
-
-AppsKey & F12::
-InputBox, transWord, English Word, Escribe una palabra en inglés para traducirla,,,,,,, 40, Exchange
-    if ErrorLevel 
-        return
-    else
-        func_myHistory(transWord, "translate")
-        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, translateWith
-        Sleep 50
-        Loop, parse, optionsArray, |
-        {
-            searchWith := TRANSLATE_URL[A_LoopField]
-            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-            searchTerm := searchWith transWord
-            RunWait, %defaultBrowser% `"%searchTerm%`"
-        }
-return
-
-
-AppsKey & PrintScreen::
-if GetKeyState("Control", "P") {
-    sleep, 50
-    send, ^c
-    sleep, 50
-    esperantoVorto = %Clipboard%
-}
-else {
-    InputBox, esperantoVorto, Esperanto Vortaro, Entajpu vorton en Esperanto por serĉi la difinon,,,,,,, 40, Saluton
-}
-    if ErrorLevel 
-        return
-    else
-        func_myHistory(esperantoVorto, "esperanto")
-        IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, espoWith
-        Sleep 50
-        Loop, parse, optionsArray, |
-        {
-            searchWith := ESPO_URL[A_LoopField]
-            defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-            searchTerm := searchWith esperantoVorto
-            RunWait, %defaultBrowser% `"%searchTerm%`"
-        }
-return
-
-AppsKey & i::
-if GetKeyState("Control", "P") {
-    sleep, 15
-    send, ^c
-    sleep, 50
-    parolaItaliana = %Clipboard%
-    ; MsgBox, %parolaItaliana%
-} ; indica que alguna de las dos condiciones debe ser verdadera, pero solo una.
-else {
-    InputBox, parolaItaliana, Dizionario Italiano, Scrivi una parola in italiano,,,,,,, 40, ;dosso
-}  
-if ErrorLevel 
-    return
-else
-    func_myHistory(parolaItaliana, "italiano")
-    IniRead, optionsArray, AHK_settings.ini, SEARCH_ENGINES, itaWith
-    Sleep 50
-    Loop, parse, optionsArray, |
-    {
-        searchWith := ITA_URL[A_LoopField]
-        defaultBrowser := BROWSERS_EXE[defaultBrowser_whatis()]
-        searchTerm := searchWith parolaItaliana
-        RunWait, %defaultBrowser% `"%searchTerm%`"
-    }
-return
+AppsKey & F10::SearchWeb("search")
+AppsKey & F11::SearchWeb("definition")
+AppsKey & F12::SearchWeb("translate")
+AppsKey & PrintScreen::SearchWeb("esperanto")
+AppsKey & i::SearchWeb("italiano")
 
 
 ;;;;;;
@@ -923,61 +784,23 @@ return
 
 
 
+; Fechas y horas
+AppsKey & q::SendDate("yyyyMMdd")
+AppsKey & w::SendDate("HHmm")
+AppsKey & f::SendDate("LongDate")
+AppsKey & s::SendDate("ShortDate")
+AppsKey & h::SendDate("Time")
+AppsKey & d::SendDate("dd")
+AppsKey & m::SendDate("MM")
+AppsKey & a::SendDate("yyyy")
+AppsKey & t::SendDate("Time")
 
-AppsKey & q::
-FormatTime, todaysDate, %A_Now%, yyyyMMdd ;;ISO 8601
-send, %todaysDate%
-return
+SendDate(format) {
+    FormatTime, dateStr, %A_Now%, %format%
+    Send, %dateStr%
+}
 
-AppsKey & w::
-FormatTime, todaysDate, %A_Now%, HHmm
-send, %todaysDate%
-return
-
-
-
-AppsKey & f::
-FormatTime, todaysDate, %A_Now%, LongDate ;dd 'de' MMMM 'del' yyyy
-send, %todaysDate%
-return
-
-
-AppsKey & s::
-FormatTime, todaysDate, %A_Now%, ShortDate
-send, %todaysDate%
-return
-
-AppsKey & c::
-FormatTime, todaysDate, %A_Now%, dd 'de' MMMM
-send, %todaysDate%
-return
-
-AppsKey & h::
-FormatTime, todaysDate, %A_Now%, Time
-send, %todaysDate%
-return
-
-AppsKey & d::
-FormatTime, todaysDate, %A_Now%, dd
-send, %todaysDate%
-return
-
-AppsKey & m::
-FormatTime, todaysDate, %A_Now%, MM
-send, %todaysDate%
-return
-
-AppsKey & a::
-FormatTime, todaysDate, %A_Now%, yyyy
-send, %todaysDate%
-return
-
-AppsKey & t::
-FormatTime, todaysDate, %A_Now%, Time
-send, %todaysDate%
-return
-
-AppsKey & p::
+AppsKey & p:: ;;obtener el color de un pixel
 MouseGetPos,x,y
 PixelGetColor,rgb,x,y,RGB
 StringTrimLeft,rgb,rgb,2
@@ -986,7 +809,7 @@ ToolTip, Color %rgb% copiado!
 SetTimer, RemoveToolTip, -1500 ;;esto podría tambien ser un sleep y  después volver a poner un tooltip
 Return
 
-AppsKey & o::
+AppsKey & o:: ;; obtener la posición del cursor en la pantalla
 CoordMode, Mouse, Screen
 MouseGetPos,xPos,yPos
 Clipboard= %xPos%, %yPos%
@@ -997,7 +820,9 @@ Return
 
 
 
-
+AppsKey & End::
+search_chords()
+return
 
 
 AppsKey & Up::
@@ -1134,7 +959,7 @@ return
      */                                                             
 
 
-#IfWinActive ahk_exe ahk_exe Explorer.EXE
+#IfWinActive ahk_exe Explorer.EXE
 Return
 
 #Include, %A_LineFile%\..\bookmarksNotes.ahk
