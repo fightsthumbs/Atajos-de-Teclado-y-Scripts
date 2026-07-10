@@ -1,4 +1,4 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 ;SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -17,7 +17,7 @@ return
 
 
 
-::¿a::se despicha el audio
+/* ::¿a::se despicha el audio
 ::¿pi::pausa innecesaria
 ::¿e::se equivoca
 ::¿gc::gallo claudio
@@ -29,15 +29,9 @@ return
 ::¿sr::suena raro
 ::¿nv::no vocaliza/problemas de vocalización o pronunciación
 
-
+ */
 /*
 ;esto permite que la tecla sola siga funcionando
 $AppsKey::Send, {AppsKey}
-
-;;ESTA LINEA SE PUEDE BORRAR, SOLO SIRVE PARA CCKAMPUS
-AppsKey & {::
-send, MCOP
-Return
-*/
 
 

@@ -91,6 +91,25 @@ SaveFormattedText(text, format) {
 Variable := "Mensaje"
 ; Teclas de función para diferentes formatos
 
+; F8 - Texto normal con comentario
+F8::
+    SelectedText := CopySelectedText()
+    if (SelectedText = "") {
+        return
+    }
+    
+    ; Mostrar InputBox para comentario
+    InputBox, UserComment, Añadir Comentario, Escribe tu comentario o nota:, , 400, 150
+    
+    SelectedText := SelectedText . "`n{" . UserComment "}"
+    ; Si el usuario cancela, no guardar nada
+    if ErrorLevel {
+        return
+    }
+    
+    SaveFormattedText(SelectedText, "normal")
+return
+
 ; F9 - Texto normal
 F9::
     SelectedText := CopySelectedText()

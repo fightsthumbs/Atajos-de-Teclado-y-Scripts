@@ -25,10 +25,170 @@ return
 :*:c//::₡ ;"ALT + 198"
 :*:e//::€
 :*:|copyr::©
-:*:|pi::π
+
+
 :*:|cr::🇨🇷
 :*:|im::🇮🇲
 :?*:|par::§
+
+; ============================================
+; HOTSTRINGS PARA SÍMBOLOS MATEMÁTICOS
+; ============================================
+
+; LETRAS GRIEGAS MINÚSCULAS
+:*:|alpha::α
+:*:|beta::β
+:*:|gamma::γ
+:*:|delta::δ
+:*:|epsilon::ε
+:*:|zeta::ζ
+:*:|eta::η
+:*:|theta::θ
+:*:|iota::ι
+:*:|kappa::κ
+:*:|lambda::λ
+:*:|mu::μ
+:*:|nu::ν
+:*:|xi::ξ
+:*:|omicron::ο
+:*:|pi::π
+:*:|rho::ρ
+:*:|sigma::σ
+:*:|tau::τ
+:*:|upsilon::υ
+:*:|phi::φ
+:*:|chi::χ
+:*:|psi::ψ
+:*:|omega::ω
+
+; LETRAS GRIEGAS MAYÚSCULAS
+:*:|Alpha::Α
+:*:|Beta::Β
+:*:|Gamma::Γ
+:*:|Delta::Δ
+:*:|Epsilon::Ε
+:*:|Theta::Θ
+:*:|Lambda::Λ
+:*:|Xi::Ξ
+:*:|Pi::Π
+:*:|Sigma::Σ
+:*:|Phi::Φ
+:*:|Psi::Ψ
+:*:|Omega::Ω
+
+; OPERADORES MATEMÁTICOS
+:*:|pm::±
+:*:|mp::∓
+:*:|times::×
+:*:|div::÷
+:*:|cdot::·
+:*:|ast::∗
+:*:|star::⋆
+:*:|circ::∘
+:*:|bullet::•
+
+; RELACIONES Y COMPARACIONES
+:*:|le::≤
+:*:|ge::≥
+:*:|ne::≠
+:*:|approx::≈
+:*:|equiv::≡
+:*:|sim::∼
+:*:|cong::≅
+:*:|prop::∝
+:*:|ll::≪
+:*:|gg::≫
+
+; CONJUNTOS
+::|in::∈
+:*:|notin::∉
+:*:|ni::∋
+:*:|subset::⊂
+:*:|supset::⊃
+:*:|subseteq::⊆
+:*:|supseteq::⊇
+:*:|cup::∪
+:*:|cap::∩
+:*:|emptyset::∅
+:*:|setminus::∖
+
+; LÓGICA
+:*:|and::∧
+:*:|or::∨
+:*:|neg::¬
+:*:|forall::∀
+:*:|exists::∃
+:*:|nexists::∄
+:*:|therefore::∴
+:*:|because::∵
+
+; CÁLCULO E INFINITO
+:*:|infty::∞
+:*:|partial::∂
+:*:|nabla::∇
+:*:|int::∫
+:*:|iint::∬
+:*:|iiint::∭
+:*:|oint::∮
+:*:|sum::∑
+:*:|prod::∏
+:*:|coprod::∐
+
+; FLECHAS
+:*:|to::→
+:*:|rightarrow::→
+:*:|leftarrow::←
+:*:|leftrightarrow::↔
+:*:|Rightarrow::⇒
+:*:|Leftarrow::⇐
+:*:|Leftrightarrow::⇔
+:*:|mapsto::↦
+:*:|uparrow::↑
+:*:|downarrow::↓
+
+; RAÍCES Y POTENCIAS
+:*:|sqrt::√
+:*:|cbrt::∛
+:*:|sup2::²
+:*:|sup3::³
+:*:|sup1::¹
+
+; FRACCIONES COMUNES
+:*:|frac12::½
+:*:|frac13::⅓
+:*:|frac23::⅔
+:*:|frac14::¼
+:*:|frac34::¾
+:*:|frac15::⅕
+:*:|frac18::⅛
+
+; SÍMBOLOS ESPECIALES
+:*:|deg::°
+:*:|angle::∠
+:*:|perp::⊥
+:*:|parallel::∥
+:*:|triangle::△
+
+; NÚMEROS Y CONSTANTES
+:*:|Re::ℝ
+:*:|Co::ℂ
+:*:|Na::ℕ
+:*:|Zo::ℤ
+:*:|Qo::ℚ
+:*:|aleph::ℵ
+
+; MISCELÁNEOS
+:*:|hbar::ℏ
+:*:|ell::ℓ
+:*:|wp::℘
+:*:|oplus::⊕
+:*:|ominus::⊖
+:*:|otimes::⊗
+:*:|odot::⊙
+:*:|dagger::†
+:*:|ddagger::‡
+
+
 
 ;§
 ;≈

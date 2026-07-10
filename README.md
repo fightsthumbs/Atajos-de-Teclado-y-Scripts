@@ -45,3 +45,14 @@ Resuelve los problemas al copiar texto desde un pdf.
 Pega el texto con el siguiente comando:
 `CTRL + WIN + V`
 y automáticamente se eliminarán los saltos de línea innecesario.
+
+## Buscar Acordes
+`AppsKey + END`
+Busca los acordes de la canción que se esté reproduciendo en Spotify.
+
+## Bookmarks Sumatra
+`F8` Nota con comentario
+`F9` texto normal
+`F10` __negrita__
+`F11` _cursiva_
+`F12` <u>underline</u>
